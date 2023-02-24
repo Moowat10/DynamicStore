@@ -1,0 +1,7 @@
+D:\.NET Apps\DynamicStore\DynamicStore\obj\Debug\net6.0\DynamicStoreBackend.csproj.AssemblyReference.cache
+D:\.NET Apps\DynamicStore\DynamicStore\obj\Debug\net6.0\DynamicStoreBackend.GeneratedMSBuildEditorConfig.editorconfig
+D:\.NET Apps\DynamicStore\DynamicStore\obj\Debug\net6.0\DynamicStoreBackend.AssemblyInfoInputs.cache
+D:\.NET Apps\DynamicStore\DynamicStore\obj\Debug\net6.0\DynamicStoreBackend.AssemblyInfo.cs
+D:\.NET Apps\DynamicStore\DynamicStore\obj\Debug\net6.0\DynamicStoreBackend.csproj.CoreCompileInputs.cache
+D:\.NET Apps\DynamicStore\DynamicStore\obj\Debug\net6.0\DynamicStoreBackend.MvcApplicationPartsAssemblyInfo.cs
+D:\.NET Apps\DynamicStore\DynamicStore\obj\Debug\net6.0\DynamicStoreBackend.MvcApplicationPartsAssemblyInfo.cache

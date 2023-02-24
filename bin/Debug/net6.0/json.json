@@ -1,0 +1,191 @@
+{
+  "storeId": 10,
+  "storeName": "ahmed",
+  "storeDescription": "dgrdgrgrgssgsgs",
+  "storePhone": "12345678",
+  "storeEmail": "string",
+  "storeAddress": "string",
+  "categories": [
+    {
+      "categoryId": 0,
+      "categoryDescription": "string"
+    }
+  ],
+  "products": [
+    {
+      "productId": 0,
+      "productName": "string",
+      "productDescription": "string",
+      "productPrice": 0
+    }
+  ],
+  "orders": [
+    {
+      "orderId": 0,
+      "orderDate": "2023-02-22T19:43:08.714Z",
+      "orderTotal": 0,
+      "customerName": "string",
+      "customerEmail": "string",
+      "storeId": 0,
+      "store": {
+        "storeId": 0,
+        "storeName": "string",
+        "storeDescription": "string",
+        "storeAddress": "string",
+        "categories": [
+          {
+            "categoryId": 0,
+            "categoryDescription": "string"
+          }
+        ],
+        "products": [
+          {
+            "productId": 0,
+            "productName": "string",
+            "productDescription": "string",
+            "productPrice": 0
+          }
+        ],
+        "orders": [
+          "string"
+        ],
+        "permissions": [
+          {
+            "permissionId": 0,
+            "canAddProducts": true,
+            "canEditProducts": true,
+            "canDeleteProducts": true,
+            "canViewOrders": true,
+            "canEditOrders": true,
+            "storeId": 0
+          }
+        ],
+        "finances": [
+          "string"
+        ],
+        "storeStatistics": "string"
+      },
+      "orderItems": [
+        {
+          "orderItemId": 0,
+          "orderId": 0,
+          "order": "string",
+          "productId": 0,
+          "product": {
+            "productId": 0,
+            "productName": "string",
+            "productDescription": "string",
+            "productPrice": 0
+          },
+          "quantity": 0,
+          "price": 0
+        }
+      ]
+    }
+  ],
+  "permissions": [
+    {
+      "permissionId": 0,
+      "canAddProducts": true,
+      "canEditProducts": true,
+      "canDeleteProducts": true,
+      "canViewOrders": true,
+      "canEditOrders": true,
+      "storeId": 0
+    }
+  ],
+  "finances": [
+    {
+      "finance_id": 0,
+      "storeId": 0,
+      "store": {
+        "storeId": 0,
+        "storeName": "string",
+        "storeDescription": "string",
+        "storeAddress": "string",
+        "categories": [
+          {
+            "categoryId": 0,
+            "categoryDescription": "string"
+          }
+        ],
+        "products": [
+          {
+            "productId": 0,
+            "productName": "string",
+            "productDescription": "string",
+            "productPrice": 0
+          }
+        ],
+        "orders": [
+          "string"
+        ],
+        "permissions": [
+          {
+            "permissionId": 0,
+            "canAddProducts": true,
+            "canEditProducts": true,
+            "canDeleteProducts": true,
+            "canViewOrders": true,
+            "canEditOrders": true,
+            "storeId": 0
+          }
+        ],
+        "finances": [
+          "string"
+        ],
+        "storeStatistics": "string"
+      },
+      "finance_date": "2023-02-22T19:43:08.714Z",
+      "finance_description": "string",
+      "finance_amount": 0,
+      "finance_type": "string"
+    }
+  ],
+  "storeStatistics": {
+    "storeId": 0,
+    "store": {
+      "storeId": 0,
+      "storeName": "string",
+      "storeDescription": "string",
+      "storeAddress": "string",
+      "categories": [
+        {
+          "categoryId": 0,
+          "categoryDescription": "string"
+        }
+      ],
+      "products": [
+        {
+          "productId": 0,
+          "productName": "string",
+          "productDescription": "string",
+          "productPrice": 0
+        }
+      ],
+      "orders": [
+        "string"
+      ],
+      "permissions": [
+        {
+          "permissionId": 0,
+          "canAddProducts": true,
+          "canEditProducts": true,
+          "canDeleteProducts": true,
+          "canViewOrders": true,
+          "canEditOrders": true,
+          "storeId": 0
+        }
+      ],
+      "finances": [
+        "string"
+      ],
+      "storeStatistics": "string"
+    },
+    "total_products": 0,
+    "total_categories": 0,
+    "total_inventory": 0,
+    "total_sales": 0,
+    "total_orders": 0
+  }
+}
