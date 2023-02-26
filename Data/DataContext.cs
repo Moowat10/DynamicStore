@@ -1,4 +1,5 @@
 ﻿using DynamicStore.Models;
+using DynamicStoreBackend.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DynamicStore.Data
@@ -28,6 +29,11 @@ namespace DynamicStore.Data
             public DbSet<Employee> Employees { get; set; }
             public DbSet<EmployeeAttendance> EmployeeAttendance { get; set; }
             public DbSet<Finance> Finances { get; set; }
-            public DbSet<StoreStatistics> StoreStatistics { get; set; }
+            public DbSet<Revenue> Revenues { get; set; }
+        public DbSet<Expense> Expenses { get; set; }
+        public DbSet<Payroll> Payrolls { get; set; }
+        public DbSet<Tax> Taxes { get; set; }
+
+        public DbSet<StoreStatistics> StoreStatistics { get; set; }
         }
 }
