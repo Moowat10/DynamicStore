@@ -1,7 +1,10 @@
-﻿using DynamicStore.Interface;
+﻿using System.Threading.Tasks;
+using DynamicStore.Data;
 using DynamicStore.Models;
 using DynamicStore.DTO;
+using DynamicStore.Services;
 using Microsoft.AspNetCore.Mvc;
+using DynamicStore.Interface;
 
 namespace DynamicStore.Controllers
 {
@@ -9,76 +12,65 @@ namespace DynamicStore.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserServices _userServices;
 
-        public UserController(IUserRepository userRepository)
+        public UserController(IUserServices userServices)
         {
-            _userRepository = userRepository;
+            _userServices = userServices;
         }
+
 
         [HttpGet]
-        public async Task<IEnumerable<User>> GetUsersAsync()
+        public async Task<IActionResult> Get()
         {
-            return await _userRepository.GetUsersAsync();
+            var users = await _userServices.GetUsersAsync();
+            return Ok(users);
         }
 
-        [HttpGet("{userId}")]
-        public async Task<ActionResult<User>> GetUserByIdAsync(int userId)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
         {
-            var user = await _userRepository.GetUserByIdAsync(userId);
+            var user = await _userServices.GetUserByIdAsync(id);
 
             if (user == null)
             {
                 return NotFound();
             }
 
-            return user;
+            return Ok(user);
         }
 
         [HttpPost]
-        public async Task<ActionResult<User>> AddUserAsync(User user)
+        public async Task<IActionResult> Create(NewUserDTO user)
         {
-            var addedUser = await _userRepository.AddUserAsync(user);
-            return CreatedAtAction(nameof(GetUserByIdAsync), new { userId = addedUser.UserId }, addedUser);
+            var newUser = await _userServices.AddUserAsync(user);
+            return CreatedAtAction(nameof(GetById), new { id = newUser.UserId }, newUser);
         }
 
-        [HttpPut("{userId}")]
-        public async Task<IActionResult> UpdateUserAsync(int userId, UserUpdateDTO user)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, User user)
         {
-            if (userId != user.UserId)
-            {
-                return BadRequest();
-            }
-
-            var existingUser = await _userRepository.GetUserByIdAsync(userId);
-
-            if (existingUser == null)
-            {
-                return NotFound();
-            }
-            if(user.Username != null)
-            existingUser.Username = user.Username;
-            if (user.Password != null)
-                existingUser.Password = user.Password;
-
-            await _userRepository.UpdateUserAsync(userId, existingUser);
-
-            return NoContent();
-        }
-
-        [HttpDelete("{userId}")]
-        public async Task<IActionResult> DeleteUserAsync(int userId)
-        {
-            var existingUser = await _userRepository.GetUserByIdAsync(userId);
+            var existingUser = await _userServices.UpdateUserAsync(id, user);
 
             if (existingUser == null)
             {
                 return NotFound();
             }
 
-            await _userRepository.DeleteUserAsync(userId);
+            return Ok(existingUser);
+        }
 
-            return NoContent();
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _userServices.DeleteUserAsync(id);
+
+            if (!result)
+            {
+                return NotFound();
+            }
+
+            return Ok();
         }
     }
-    }
+}

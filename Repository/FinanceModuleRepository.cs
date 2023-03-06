@@ -33,7 +33,7 @@ public class FinanceModuleRepository : IFinanceModuleRepository
         return _dbContext.Expenses.Where(e => e.Date >= startDate && e.Date <= endDate);
     }
 
-    public IEnumerable<Revenue> GetRevenuesForProduct(int productId, DateTime startDate, DateTime endDate)
+    /**public IEnumerable<Revenue> GetRevenuesForProduct(int productId, DateTime startDate, DateTime endDate)
     {
         return _dbContext.Orders
             .Where(o => o.OrderItems.Any(oi => oi.ProductId == productId))
@@ -48,25 +48,25 @@ public class FinanceModuleRepository : IFinanceModuleRepository
             .SelectMany(o => o.Taxes)
             .Where(t => t.Date >= startDate && t.Date <= endDate);
     }
-
+    
     public IEnumerable<Expense> GetExpensesByCategory(string category, DateTime startDate, DateTime endDate)
     {
         return _dbContext.Expenses.Where(e => e.Category == category && e.Date >= startDate && e.Date <= endDate);
     }
-
+    **/
     public IEnumerable<Payroll> GetPayrollsByEmployee(int employeeId, DateTime startDate, DateTime endDate)
     {
         return _dbContext.Payrolls.Where(p => p.EmployeeId == employeeId && p.Date >= startDate && p.Date <= endDate);
     }
 
-    public IEnumerable<Revenue> GetRevenuesByCustomer(int customerId, DateTime startDate, DateTime endDate)
+   /** public IEnumerable<Revenue> GetRevenuesByCustomer(string customerEamil, DateTime startDate, DateTime endDate)
     {
         return _dbContext.Orders
-            .Where(o => o.CustomerId == customerId)
+            .Where(o => o.CustomerEmail == customerEamil)
             .SelectMany(o => o.Revenues)
             .Where(r => r.Date >= startDate && r.Date <= endDate);
     }
-
+   **/
     public decimal GetNetProfit(DateTime startDate, DateTime endDate)
     {
         var revenues = _dbContext.Revenues.Where(r => r.Date >= startDate && r.Date <= endDate).Sum(r => r.Amount);

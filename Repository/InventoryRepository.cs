@@ -61,7 +61,7 @@ namespace DynamicStore.Repository
         public async Task<List<Inventory>> GetInventoryByWarehouseAsync(int warehouseId)
         {
             return await _context.Inventory
-                .Include(i => i.Product)
+                .Include(i => i.InventoryId)
                 .Where(i => i.WarehouseId == warehouseId)
                 .ToListAsync();
         }
@@ -69,7 +69,7 @@ namespace DynamicStore.Repository
         public async Task<List<Inventory>> GetLowInventoryAsync(int threshold)
         {
             return await _context.Inventory
-                .Include(i => i.Product)
+                .Include(i => i.InventoryId)
                 .Where(i => i.InventoryQuantity <= i.InventoryAlertQuantity * threshold)
                 .ToListAsync();
         }

@@ -14,11 +14,14 @@ namespace DynamicStore.Models
 
         [Required]
         public string Password { get; set; }
-        
+
         [Obsolete]
         [Required]
         public string Email { get; set; }
 
         public ICollection<UserStorePermission>? Permissions { get; set; }
+
+        public ICollection<Store>? Stores { get; set; }
+
     }
 }

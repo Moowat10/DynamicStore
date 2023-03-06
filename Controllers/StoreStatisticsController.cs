@@ -9,24 +9,24 @@ namespace DynamicStore.Controllers
     [Route("api/[controller]")]
     public class StoreStatisticsController : ControllerBase
     {
-        private readonly IStoreStatisticsRepository _repository;
+        private readonly IStoreStatisticsServices _storeStatisticsServices;
 
-        public StoreStatisticsController(IStoreStatisticsRepository repository)
+        public StoreStatisticsController(IStoreStatisticsServices storeStatisticsServices)
         {
-            _repository = repository;
+            _storeStatisticsServices = storeStatisticsServices;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<StoreStatistics>>> GetAllStoreStatisticsAsync()
         {
-            var storeStatistics = await _repository.GetAllStoreStatisticsAsync();
+            var storeStatistics = await _storeStatisticsServices.GetAllStoreStatisticsAsync();
             return Ok(storeStatistics);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<StoreStatistics>> GetStoreStatisticsByIdAsync(int id)
         {
-            var storeStatistics = await _repository.GetStoreStatisticsByIdAsync(id);
+            var storeStatistics = await _storeStatisticsServices.GetStoreStatisticsByIdAsync(id);
 
             if (storeStatistics == null)
             {
@@ -39,7 +39,7 @@ namespace DynamicStore.Controllers
         [HttpPost]
         public async Task<ActionResult<StoreStatistics>> CreateStoreStatisticsAsync(StoreStatistics storeStatistics)
         {
-            var createdStoreStatistics = await _repository.CreateStoreStatisticsAsync(storeStatistics);
+            var createdStoreStatistics = await _storeStatisticsServices.CreateStoreStatisticsAsync(storeStatistics);
             return CreatedAtAction(nameof(GetStoreStatisticsByIdAsync), new { id = createdStoreStatistics.StoreId }, createdStoreStatistics);
         }
 
@@ -51,7 +51,7 @@ namespace DynamicStore.Controllers
                 return BadRequest();
             }
 
-            var updatedStoreStatistics = await _repository.UpdateStoreStatisticsAsync(storeStatistics);
+            var updatedStoreStatistics = await _storeStatisticsServices.UpdateStoreStatisticsAsync(id, storeStatistics);
 
             if (updatedStoreStatistics == null)
             {
@@ -64,29 +64,27 @@ namespace DynamicStore.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteStoreStatisticsAsync(int id)
         {
-            var storeStatistics = await _repository.GetStoreStatisticsByIdAsync(id);
+            var result = await _storeStatisticsServices.DeleteStoreStatisticsAsync(id);
 
-            if (storeStatistics == null)
+            if (!result)
             {
                 return NotFound();
             }
 
-            await _repository.DeleteStoreStatisticsAsync(storeStatistics);
-
-            return NoContent();
+            return Ok();
         }
 
         [HttpGet("total-products/{storeId}")]
         public async Task<ActionResult<int>> GetTotalProductsAsync(int storeId)
         {
-            var totalProducts = await _repository.GetTotalProductsAsync(storeId);
+            var totalProducts = await _storeStatisticsServices.GetTotalProductsAsync(storeId);
             return Ok(totalProducts);
         }
 
         [HttpGet("total-categories/{storeId}")]
         public async Task<ActionResult<int>> GetTotalCategoriesAsync(int storeId)
         {
-            var totalCategories = await _repository.GetTotalCategoriesAsync(storeId);
+            var totalCategories = await _storeStatisticsServices.GetTotalCategoriesAsync(storeId);
             return Ok(totalCategories);
         }
 
@@ -94,14 +92,14 @@ namespace DynamicStore.Controllers
         [HttpGet("total-sales/{storeId}")]
         public async Task<ActionResult<decimal>> GetTotalSalesAsync(int storeId)
         {
-            var totalSales = await _repository.GetTotalSalesAsync(storeId);
+            var totalSales = await _storeStatisticsServices.GetTotalSalesAsync(storeId);
             return Ok(totalSales);
         }
 
         [HttpGet("total-orders/{storeId}")]
         public async Task<ActionResult<int>> GetTotalOrdersAsync(int storeId)
         {
-            var totalOrders = await _repository.GetTotalOrdersAsync(storeId);
+            var totalOrders = await _storeStatisticsServices.GetTotalOrdersAsync(storeId);
             return Ok(totalOrders);
         }
     }

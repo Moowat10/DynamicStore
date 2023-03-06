@@ -71,8 +71,7 @@ namespace DynamicStore.Controllers
                 existingEmployee.EmployeeEmail = employee.EmployeeEmail;
             if (employee.EmployeeSalary != null)
                 existingEmployee.EmployeeSalary = (decimal)employee.EmployeeSalary;
-            if (employee.StoreId != null)
-                existingEmployee.StoreId = (int)employee.StoreId;
+            
             if (employee.UserId != null)
                 existingEmployee.UserId = (int)employee.UserId;
 

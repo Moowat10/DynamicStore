@@ -7,7 +7,7 @@ namespace DynamicStore.DTO
         public class InventoryDTO
         {
             public int InventoryId { get; set; }
-            public int ProductId { get; set; }
+           
             public int WarehouseId { get; set; }
             public int InventoryQuantity { get; set; }
             public int InventoryAlertQuantity { get; set; }
@@ -17,7 +17,6 @@ namespace DynamicStore.DTO
                 return new InventoryDTO
                 {
                     InventoryId = inventory.InventoryId,
-                    ProductId = inventory.ProductId,
                     WarehouseId = inventory.WarehouseId,
                     InventoryQuantity = inventory.InventoryQuantity,
                     InventoryAlertQuantity = inventory.InventoryAlertQuantity
@@ -33,7 +32,7 @@ namespace DynamicStore.DTO
             {
                 return new Inventory
                 {
-                    ProductId = InventoryDTO.ProductId,
+                 
                     WarehouseId = InventoryDTO.WarehouseId,
                     InventoryQuantity = InventoryDTO.InventoryQuantity,
                     InventoryAlertQuantity = InventoryDTO.InventoryAlertQuantity
@@ -42,7 +41,6 @@ namespace DynamicStore.DTO
 
             public static void UpdateInventoryFromDto(InventoryDTO InventoryDTO, Inventory inventory)
             {
-                inventory.ProductId = InventoryDTO.ProductId;
                 inventory.WarehouseId = InventoryDTO.WarehouseId;
                 inventory.InventoryQuantity = InventoryDTO.InventoryQuantity;
                 inventory.InventoryAlertQuantity = InventoryDTO.InventoryAlertQuantity;

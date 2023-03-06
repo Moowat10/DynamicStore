@@ -46,7 +46,7 @@ namespace DynamicStore.Repositories
                 existingEmployee.EmployeeEmail = employee.EmployeeEmail;
                 existingEmployee.EmployeeHireDate = employee.EmployeeHireDate;
                 existingEmployee.EmployeeSalary = employee.EmployeeSalary;
-                existingEmployee.StoreId = employee.StoreId;
+               
                 existingEmployee.UserId = employee.UserId;
 
                 await _context.SaveChangesAsync();

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Security;
 
 namespace DynamicStore.Models
@@ -25,15 +26,16 @@ namespace DynamicStore.Models
         [Required]
         public string StoreAddress { get; set; }
 
-        public virtual ICollection<Category> Categories { get; set; }
+        public virtual ICollection<Employee>? Employees { get; set; }
+
 
         public virtual ICollection<Product>? Products { get; set; }
 
-        public virtual ICollection<Order> Orders { get; set; }
+        public virtual ICollection<Order>? Orders { get; set; }
 
-        public virtual ICollection<StorePermission> Permissions { get; set; }
+        public virtual ICollection<StorePermission>? Permissions { get; set; }
 
-        public virtual ICollection<Finance> Finances { get; set; }
+        public virtual ICollection<Finance>? Finances { get; set; }
 
     }
 }

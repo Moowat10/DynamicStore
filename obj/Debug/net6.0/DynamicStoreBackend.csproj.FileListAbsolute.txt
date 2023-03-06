@@ -87,3 +87,4 @@ D:\.NET Apps\DynamicStore\DynamicStore\obj\Debug\net6.0\refint\DynamicStoreBacke
 D:\.NET Apps\DynamicStore\DynamicStore\obj\Debug\net6.0\DynamicStoreBackend.pdb
 D:\.NET Apps\DynamicStore\DynamicStore\obj\Debug\net6.0\DynamicStoreBackend.genruntimeconfig.cache
 D:\.NET Apps\DynamicStore\DynamicStore\obj\Debug\net6.0\ref\DynamicStoreBackend.dll
+D:\.NET Apps\DynamicStore\DynamicStore\bin\Debug\net6.0\AutoMapper.dll

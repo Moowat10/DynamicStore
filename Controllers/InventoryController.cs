@@ -41,7 +41,7 @@ namespace DynamicStore.Controllers
         {
             var inventory = new Inventory
             {
-                ProductId = inventoryDTO.ProductId,
+               
                 WarehouseId = inventoryDTO.WarehouseId,
                 InventoryQuantity = inventoryDTO.InventoryQuantity,
                 InventoryAlertQuantity = inventoryDTO.InventoryAlertQuantity
@@ -66,7 +66,7 @@ namespace DynamicStore.Controllers
                 return NotFound();
             }
 
-            existingInventory.ProductId = inventoryDTO.ProductId;
+           
             existingInventory.WarehouseId = inventoryDTO.WarehouseId;
             existingInventory.InventoryQuantity = inventoryDTO.InventoryQuantity;
             existingInventory.InventoryAlertQuantity = inventoryDTO.InventoryAlertQuantity;

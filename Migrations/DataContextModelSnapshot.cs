@@ -31,7 +31,6 @@ namespace DynamicStore.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
 
                     b.Property<string>("CategoryDescription")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -40,12 +39,7 @@ namespace DynamicStore.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int?>("StoreId")
-                        .HasColumnType("int");
-
                     b.HasKey("CategoryId");
-
-                    b.HasIndex("StoreId");
 
                     b.ToTable("Categories");
                 });
@@ -103,13 +97,15 @@ namespace DynamicStore.Migrations
                     b.Property<decimal>("EmployeeSalary")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("StoreId")
+                    b.Property<int?>("StoreId")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("EmployeeId");
+
+                    b.HasIndex("StoreId");
 
                     b.HasIndex("UserId");
 
@@ -176,11 +172,9 @@ namespace DynamicStore.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("finance_description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("finance_type")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("finance_id");
@@ -204,15 +198,10 @@ namespace DynamicStore.Migrations
                     b.Property<int>("InventoryQuantity")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
                     b.Property<int>("WarehouseId")
                         .HasColumnType("int");
 
                     b.HasKey("InventoryId");
-
-                    b.HasIndex("ProductId");
 
                     b.HasIndex("WarehouseId");
 
@@ -288,8 +277,10 @@ namespace DynamicStore.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
 
+                    b.Property<int?>("InventoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ProductDescription")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProductName")
@@ -303,6 +294,8 @@ namespace DynamicStore.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ProductId");
+
+                    b.HasIndex("InventoryId");
 
                     b.HasIndex("StoreId");
 
@@ -382,7 +375,12 @@ namespace DynamicStore.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("StoreId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Stores");
                 });
@@ -395,10 +393,19 @@ namespace DynamicStore.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PermissionId"));
 
+                    b.Property<bool>("CanAddEmployees")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("CanAddProducts")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("CanDeleteEmployees")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("CanDeleteProducts")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanEditEmployees")
                         .HasColumnType("bit");
 
                     b.Property<bool>("CanEditOrders")
@@ -413,9 +420,14 @@ namespace DynamicStore.Migrations
                     b.Property<int>("StoreId")
                         .HasColumnType("int");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("PermissionId");
 
                     b.HasIndex("StoreId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("StorePermissions");
                 });
@@ -499,11 +511,36 @@ namespace DynamicStore.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WarehouseId"));
 
+                    b.Property<int>("AvailableCapacity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("InventoriesCount")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("bit");
+
+                    b.Property<double>("LengthInMeters")
+                        .HasColumnType("float");
+
+                    b.Property<decimal>("PricePerSquareFoot")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("StoreId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalCapacity")
+                        .HasColumnType("int");
+
                     b.Property<string>("WarehouseAddress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("WarehouseEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WarehouseGeolocation")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -515,16 +552,163 @@ namespace DynamicStore.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<double>("WidthInMeters")
+                        .HasColumnType("float");
+
                     b.HasKey("WarehouseId");
+
+                    b.HasIndex("StoreId");
 
                     b.ToTable("Warehouses");
                 });
 
-            modelBuilder.Entity("DynamicStore.Models.Category", b =>
+            modelBuilder.Entity("DynamicStore.Models.WarehouseImage", b =>
                 {
-                    b.HasOne("DynamicStore.Models.Store", null)
-                        .WithMany("Categories")
-                        .HasForeignKey("StoreId");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("ImageData")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<int>("WarehouseId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("WarehouseImage");
+                });
+
+            modelBuilder.Entity("DynamicStoreBackend.Models.Expense", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<int>("StoreId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StoreId");
+
+                    b.ToTable("Expenses");
+                });
+
+            modelBuilder.Entity("DynamicStoreBackend.Models.Payroll", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Category")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StoreId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("StoreId");
+
+                    b.ToTable("Payrolls");
+                });
+
+            modelBuilder.Entity("DynamicStoreBackend.Models.Revenue", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<int>("StoreId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StoreId");
+
+                    b.ToTable("Revenues");
+                });
+
+            modelBuilder.Entity("DynamicStoreBackend.Models.Tax", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("StoreId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StoreId");
+
+                    b.ToTable("Taxes");
                 });
 
             modelBuilder.Entity("DynamicStore.Models.CategoryStore", b =>
@@ -548,13 +732,17 @@ namespace DynamicStore.Migrations
 
             modelBuilder.Entity("DynamicStore.Models.Employee", b =>
                 {
-                    b.HasOne("DynamicStore.Models.User", "user")
+                    b.HasOne("DynamicStore.Models.Store", null)
+                        .WithMany("Employees")
+                        .HasForeignKey("StoreId");
+
+                    b.HasOne("DynamicStore.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("user");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DynamicStore.Models.EmployeeAttendance", b =>
@@ -581,32 +769,22 @@ namespace DynamicStore.Migrations
 
             modelBuilder.Entity("DynamicStore.Models.Inventory", b =>
                 {
-                    b.HasOne("DynamicStore.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("DynamicStore.Models.Warehouse", "Warehouse")
                         .WithMany("Inventories")
                         .HasForeignKey("WarehouseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Product");
-
                     b.Navigation("Warehouse");
                 });
 
             modelBuilder.Entity("DynamicStore.Models.Order", b =>
                 {
-                    b.HasOne("DynamicStore.Models.Store", "Store")
+                    b.HasOne("DynamicStore.Models.Store", null)
                         .WithMany("Orders")
                         .HasForeignKey("StoreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Store");
                 });
 
             modelBuilder.Entity("DynamicStore.Models.OrderItem", b =>
@@ -630,6 +808,10 @@ namespace DynamicStore.Migrations
 
             modelBuilder.Entity("DynamicStore.Models.Product", b =>
                 {
+                    b.HasOne("DynamicStore.Models.Inventory", null)
+                        .WithMany("Products")
+                        .HasForeignKey("InventoryId");
+
                     b.HasOne("DynamicStore.Models.Store", null)
                         .WithMany("Products")
                         .HasForeignKey("StoreId");
@@ -673,6 +855,13 @@ namespace DynamicStore.Migrations
                     b.Navigation("Store");
                 });
 
+            modelBuilder.Entity("DynamicStore.Models.Store", b =>
+                {
+                    b.HasOne("DynamicStore.Models.User", null)
+                        .WithMany("Stores")
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("DynamicStore.Models.StorePermission", b =>
                 {
                     b.HasOne("DynamicStore.Models.Store", null)
@@ -680,13 +869,21 @@ namespace DynamicStore.Migrations
                         .HasForeignKey("StoreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("DynamicStore.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DynamicStore.Models.StoreStatistics", b =>
                 {
                     b.HasOne("DynamicStore.Models.Store", "Store")
-                        .WithOne("StoreStatistics")
-                        .HasForeignKey("DynamicStore.Models.StoreStatistics", "StoreId")
+                        .WithMany()
+                        .HasForeignKey("StoreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -704,9 +901,88 @@ namespace DynamicStore.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("DynamicStore.Models.Warehouse", b =>
+                {
+                    b.HasOne("DynamicStore.Models.Store", "Store")
+                        .WithMany()
+                        .HasForeignKey("StoreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Store");
+                });
+
+            modelBuilder.Entity("DynamicStore.Models.WarehouseImage", b =>
+                {
+                    b.HasOne("DynamicStore.Models.Warehouse", "Warehouse")
+                        .WithMany("Images")
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Warehouse");
+                });
+
+            modelBuilder.Entity("DynamicStoreBackend.Models.Expense", b =>
+                {
+                    b.HasOne("DynamicStore.Models.Store", "Store")
+                        .WithMany()
+                        .HasForeignKey("StoreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Store");
+                });
+
+            modelBuilder.Entity("DynamicStoreBackend.Models.Payroll", b =>
+                {
+                    b.HasOne("DynamicStore.Models.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DynamicStore.Models.Store", "Store")
+                        .WithMany()
+                        .HasForeignKey("StoreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("Store");
+                });
+
+            modelBuilder.Entity("DynamicStoreBackend.Models.Revenue", b =>
+                {
+                    b.HasOne("DynamicStore.Models.Store", "Store")
+                        .WithMany()
+                        .HasForeignKey("StoreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Store");
+                });
+
+            modelBuilder.Entity("DynamicStoreBackend.Models.Tax", b =>
+                {
+                    b.HasOne("DynamicStore.Models.Store", "Store")
+                        .WithMany()
+                        .HasForeignKey("StoreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Store");
+                });
+
             modelBuilder.Entity("DynamicStore.Models.Employee", b =>
                 {
                     b.Navigation("EmployeeAttendances");
+                });
+
+            modelBuilder.Entity("DynamicStore.Models.Inventory", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("DynamicStore.Models.Order", b =>
@@ -716,7 +992,7 @@ namespace DynamicStore.Migrations
 
             modelBuilder.Entity("DynamicStore.Models.Store", b =>
                 {
-                    b.Navigation("Categories");
+                    b.Navigation("Employees");
 
                     b.Navigation("Finances");
 
@@ -725,18 +1001,19 @@ namespace DynamicStore.Migrations
                     b.Navigation("Permissions");
 
                     b.Navigation("Products");
-
-                    b.Navigation("StoreStatistics")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("DynamicStore.Models.User", b =>
                 {
                     b.Navigation("Permissions");
+
+                    b.Navigation("Stores");
                 });
 
             modelBuilder.Entity("DynamicStore.Models.Warehouse", b =>
                 {
+                    b.Navigation("Images");
+
                     b.Navigation("Inventories");
                 });
 #pragma warning restore 612, 618

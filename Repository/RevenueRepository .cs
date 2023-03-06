@@ -26,7 +26,7 @@ namespace DynamicStoreBackend.Repositories
          public IEnumerable<Revenue> GetRevenuesForProduct(int productId, DateTime startDate, DateTime endDate)
     {
         return _context.Revenues
-            .Where(r => r.ProductId == productId && r.Date >= startDate && r.Date <= endDate)
+            .Where(r => r.Id == productId && r.Date >= startDate && r.Date <= endDate)
             .ToList();
     }
 

@@ -8,11 +8,7 @@ namespace DynamicStore.Models
         [Key]
         public int InventoryId { get; set; }
 
-        [ForeignKey("Product")]
-        public int ProductId { get; set; }
-        public virtual Product Product { get; set; }
-
-        [ForeignKey("Warehouse")]
+            [ForeignKey("Warehouse")]
         public int WarehouseId { get; set; }
         public virtual Warehouse Warehouse { get; set; }
 
@@ -21,5 +17,7 @@ namespace DynamicStore.Models
 
         [Required]
         public int InventoryAlertQuantity { get; set; }
+
+        public virtual ICollection<Product>? Products { get; set; }
     }
 }

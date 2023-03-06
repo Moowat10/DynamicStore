@@ -26,8 +26,6 @@ namespace DynamicStore.Models
         [Required]
         public decimal EmployeeSalary { get; set; }
 
-        [ForeignKey("Store")]
-        public int StoreId { get; set; }
 
         [ForeignKey("User")]
         public int UserId { get; set; }
