@@ -1,2 +1,6 @@
 
 appsettings.json
+appsettings.json
+bin/Debug/net6.0/DynamicStoreBackend.dll
+*.dll
+*.dll
