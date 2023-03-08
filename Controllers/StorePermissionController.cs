@@ -10,38 +10,38 @@ namespace DynamicStore.Controllers
     [Route("api/[controller]")]
     public class StorePermissionController : ControllerBase
     {
-        private readonly IStorePermissionRepository _storePermissionRepository;
+        private readonly IStorePermissionServices _storePermissionServices;
 
-        public StorePermissionController(IStorePermissionRepository storePermissionRepository)
+        public StorePermissionController(IStorePermissionServices storePermissionServices)
         {
-            _storePermissionRepository = storePermissionRepository;
+            _storePermissionServices = storePermissionServices;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<StorePermission>>> GetStorePermissionsAsync()
         {
-            var storePermissions = await _storePermissionRepository.GetStorePermissionsAsync();
+            var storePermissions = await _storePermissionServices.GetStorePermissionsAsync();
             return Ok(storePermissions);
         }
 
         [HttpGet("store/{storeId}")]
         public async Task<ActionResult<IEnumerable<StorePermission>>> GetStorePermissionsByStoreIdAsync(int storeId)
         {
-            var storePermissions = await _storePermissionRepository.GetStorePermissionsByStoreIdAsync(storeId);
+            var storePermissions = await _storePermissionServices.GetStorePermissionsByStoreIdAsync(storeId);
             return Ok(storePermissions);
         }
 
         [HttpGet("user/{userId}")]
         public async Task<ActionResult<IEnumerable<StorePermission>>> GetStorePermissionsByUserIdAsync(int userId)
         {
-            var storePermissions = await _storePermissionRepository.GetStorePermissionsByUserIdAsync(userId);
+            var storePermissions = await _storePermissionServices.GetStorePermissionsByUserIdAsync(userId);
             return Ok(storePermissions);
         }
 
         [HttpGet("{permissionId}")]
         public async Task<ActionResult<StorePermission>> GetStorePermissionByIdAsync(int permissionId)
         {
-            var storePermission = await _storePermissionRepository.GetStorePermissionByIdAsync(permissionId);
+            var storePermission = await _storePermissionServices.GetStorePermissionByIdAsync(permissionId);
 
             if (storePermission == null)
             {
@@ -54,64 +54,19 @@ namespace DynamicStore.Controllers
         [HttpPost]
         public async Task<ActionResult<StorePermission>> AddStorePermissionAsync(StorePermission storePermission)
         {
-            var addedStorePermission = await _storePermissionRepository.AddStorePermissionAsync(storePermission);
-            return CreatedAtAction(nameof(GetStorePermissionByIdAsync), new { permissionId = addedStorePermission.PermissionId }, addedStorePermission);
+            var addedStorePermission = await _storePermissionServices.AddStorePermissionAsync(storePermission);
+            return Ok(addedStorePermission);
+           
         }
 
         [HttpPut("{permissionId}")]
         public async Task<ActionResult<StorePermission>> UpdateStorePermissionAsync(int permissionId, StorePermission storePermission)
         {
-            var existingPermission = await _storePermissionRepository.GetStorePermissionByIdAsync(permissionId);
-
-            if (existingPermission == null)
+            var updatedPermission = await _storePermissionServices.UpdateStorePermissionAsync(permissionId, storePermission);
+            if (updatedPermission == null)
             {
                 return NotFound();
             }
-
-            // Update only non-null properties
-            if (existingPermission != null)
-            {
-                if (storePermission.CanAddProducts != null)
-                {
-                    existingPermission.CanAddProducts = storePermission.CanAddProducts;
-                }
-
-                if (storePermission.CanEditProducts != null)
-                {
-                    existingPermission.CanEditProducts = storePermission.CanEditProducts;
-                }
-
-                if (storePermission.CanDeleteProducts != null)
-                {
-                    existingPermission.CanDeleteProducts = storePermission.CanDeleteProducts;
-                }
-
-                if (storePermission.CanViewOrders != null)
-                {
-                    existingPermission.CanViewOrders = storePermission.CanViewOrders;
-                }
-
-                if (storePermission.CanEditOrders != null)
-                {
-                    existingPermission.CanEditOrders = storePermission.CanEditOrders;
-                }
-                if (storePermission.CanAddEmployees != null)
-                {
-                    existingPermission.CanAddEmployees = storePermission.CanAddEmployees;
-                }
-
-                if (storePermission.CanEditEmployees != null)
-                {
-                    existingPermission.CanEditEmployees = storePermission.CanEditEmployees;
-                }
-
-                if (storePermission.CanDeleteEmployees != null)
-                {
-                    existingPermission.CanDeleteEmployees = storePermission.CanDeleteEmployees;
-                }
-            }
-
-            var updatedPermission = await _storePermissionRepository.UpdateStorePermissionAsync(permissionId, existingPermission);
 
             return Ok(updatedPermission);
         }
@@ -119,11 +74,11 @@ namespace DynamicStore.Controllers
         [HttpDelete("{permissionId}")]
         public async Task<ActionResult<bool>> DeleteStorePermissionAsync(int permissionId)
         {
-            var deleted = await _storePermissionRepository.DeleteStorePermissionAsync(permissionId);
+            var deleted = await _storePermissionServices.DeleteStorePermissionAsync(permissionId);
 
             if (deleted)
             {
-                return Ok(true);
+                return Ok();
             }
 
             return NotFound();

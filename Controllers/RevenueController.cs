@@ -10,64 +10,65 @@ namespace DynamicStoreBackend.Controllers
     [ApiController]
     public class RevenueController : ControllerBase
     {
-        private readonly IRevenueRepository _revenueRepository;
+        private readonly IRevenueServices _revenueServices;
 
-        public RevenueController(IRevenueRepository revenueRepository)
+        public RevenueController(IRevenueServices revenueServices)
         {
-            _revenueRepository = revenueRepository;
+            _revenueServices = revenueServices;
+    
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Revenue> GetById(int id)
+        public async Task<ActionResult<Revenue> >GetRevenueByIdAsync(int id)
         {
-            var revenue = _revenueRepository.GetById(id);
+            var revenue = await _revenueServices.GetRevenueByIdAsync(id);
 
             if (revenue == null)
             {
                 return NotFound();
             }
 
-            return revenue;
+            return Ok(revenue);
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Revenue>> GetAll()
+        public async Task<ActionResult<IEnumerable<Revenue>>> GetAllRevenueAsync()
         {
-            var revenues = _revenueRepository.GetAll();
+            var revenues = await _revenueServices.GetAllRevenueAsync();
             return Ok(revenues);
         }
 
         [HttpPost]
-        public ActionResult<Revenue> Create(Revenue revenue)
+        public async Task<ActionResult<Revenue>> AddRevenueAsync(Revenue revenue)
         {
-            _revenueRepository.Add(revenue);
-            return CreatedAtAction(nameof(GetById), new { id = revenue.Id }, revenue);
+            var addedRevenue = await _revenueServices.AddRevenueAsync(revenue);
+            return Ok(addedRevenue);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, Revenue revenue)
+        async public Task<IActionResult> UpdateRevenueAsync(int id, Revenue revenue)
         {
-            if (id != revenue.Id)
-            {
-                return BadRequest();
-            }
-
-            _revenueRepository.Update(revenue);
-            return NoContent();
-        }
-
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
-        {
-            var revenue = _revenueRepository.GetById(id);
-
-            if (revenue == null)
+           var updatedRevenue = await _revenueServices.UpdateRevenueAsync(id, revenue);
+            if (updatedRevenue == null)
             {
                 return NotFound();
             }
 
-            _revenueRepository.Delete(revenue);
-            return NoContent();
+            return Ok(updatedRevenue);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteRevenueAsync(int id)
+        {
+            var revenue = await _revenueServices.DeleteRevenueAsync(id);
+
+            if (!revenue)
+            {
+                return NotFound();
+            }
+
+            
+            return Ok();
         }
     }
 }
