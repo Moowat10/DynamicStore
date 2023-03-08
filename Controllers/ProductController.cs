@@ -9,24 +9,24 @@ namespace DynamicStore.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly IProductRepository _productRepository;
+        private readonly IProductServices _productServices;
 
-        public ProductController(IProductRepository productRepository)
+        public ProductController(IProductServices productServices)
         {
-            _productRepository = productRepository;
+            _productServices = productServices;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProductsAsync()
         {
-            var products = await _productRepository.GetProductsAsync();
+            var products = await _productServices.GetProductsAsync();
             return Ok(products);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProductByIdAsync(int id)
         {
-            var product = await _productRepository.GetProductByIdAsync(id);
+            var product = await _productServices.GetProductByIdAsync(id);
 
             if (product == null)
             {
@@ -39,51 +39,35 @@ namespace DynamicStore.Controllers
         [HttpPost]
         public async Task<ActionResult<Product>> AddProductAsync(Product product)
         {
-            var addedProduct = await _productRepository.AddProductAsync(product);
-            return CreatedAtAction(nameof(GetProductByIdAsync), new { id = addedProduct.ProductId }, addedProduct);
+            var addedProduct = await _productServices.AddProductAsync(product);
+            return Ok(addedProduct);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProductAsync(int id, Product product)
+        public async Task<ActionResult<Product>> UpdateProductAsync(int id, Product product)
         {
-            var existingProduct = await _productRepository.GetProductByIdAsync(id);
+         
+            var updatedProduct = await _productServices.UpdateProductAsync(id, product);
 
-            if (existingProduct == null)
+            if (updatedProduct == null)
             {
                 return NotFound();
             }
 
-            if (product.ProductName != null)
-            {
-                existingProduct.ProductName = product.ProductName;
-            }
-
-            if (product.ProductDescription != null)
-            {
-                existingProduct.ProductDescription = product.ProductDescription;
-            }
-
-            if (product.ProductPrice != 0)
-            {
-                existingProduct.ProductPrice = product.ProductPrice;
-            }
-
-            await _productRepository.UpdateProductAsync(id, existingProduct);
-
-            return NoContent();
+            return Ok(updatedProduct);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProductAsync(int id)
+        public async Task<ActionResult<bool>> DeleteProductAsync(int id)
         {
-            var deleted = await _productRepository.DeleteProductAsync(id);
+            var deleted = await _productServices.DeleteProductAsync(id);
 
             if (!deleted)
             {
                 return NotFound();
             }
 
-            return NoContent();
+            return Ok(deleted);
         }
     }
 }

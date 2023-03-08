@@ -14,6 +14,5 @@ namespace DynamicStore.Models
 
         [ForeignKey("Store")]
         public int StoreId { get; set; }
-        public virtual Store Store { get; set; }
     }
 }

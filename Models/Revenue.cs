@@ -33,9 +33,6 @@ namespace DynamicStoreBackend.Models
         [ForeignKey("StoreId")]
         public int StoreId { get; set; }
 
-        
-        [Display(Name = "Store")]
-        public virtual Store Store { get; set; }
     }
 
     public enum RevenueType

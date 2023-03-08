@@ -1,6 +1,7 @@
 using DynamicStore.Models;
 using DynamicStoreBackend.Models;
 using DynamicStoreBackend.Repositories;
+using DynamicStore.DTO;
 using System.Collections.Generic;
 
 namespace DynamicStoreBackend.Services
@@ -29,10 +30,35 @@ namespace DynamicStoreBackend.Services
             return await _revenueRepository.AddAsync(revenue);
         }
 
-        public async Task<Revenue> UpdateRevenueAsync(int revenueId, Revenue revenue)
+        public async Task<Revenue> UpdateRevenueAsync(int revenueId, RevenueDTO revenue)
         {
-           return await _revenueRepository.UpdateAsync(revenueId, revenue);
+            var existingRevenue = await _revenueRepository.GetByIdAsync(revenueId);
+
+            if (existingRevenue == null)
+            {
+                return null;
+            }
+
+            if (revenue.Amount != null)
+            {
+                existingRevenue.Amount = revenue.Amount;
+            }
+
+            if (revenue.Description != null)
+            {
+                existingRevenue.Description = revenue.Description;
+            }
+
+              if (revenue.Type != null)
+            {
+                existingRevenue.Type = (Models.RevenueType)revenue.Type;
+            }
+
+            var updatedRevenue = await _revenueRepository.UpdateAsync(revenueId, existingRevenue);
+
+            return updatedRevenue;
         }
+
 
         public async Task<bool> DeleteRevenueAsync(int revenueId)
         {

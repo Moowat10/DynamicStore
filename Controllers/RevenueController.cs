@@ -1,4 +1,4 @@
-﻿using DynamicStore.Models;
+﻿using DynamicStore.DTO;
 using DynamicStoreBackend.Models;
 using DynamicStoreBackend.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -46,7 +46,7 @@ namespace DynamicStoreBackend.Controllers
         }
 
         [HttpPut("{id}")]
-        async public Task<IActionResult> UpdateRevenueAsync(int id, Revenue revenue)
+        async public Task<IActionResult> UpdateRevenueAsync(int id, RevenueDTO revenue)
         {
            var updatedRevenue = await _revenueServices.UpdateRevenueAsync(id, revenue);
             if (updatedRevenue == null)

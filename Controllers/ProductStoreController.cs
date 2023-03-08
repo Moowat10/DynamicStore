@@ -10,24 +10,23 @@ namespace DynamicStore.Controllers
     [Route("api/[controller]")]
     public class ProductStoreController : ControllerBase
     {
-        private readonly IProductStoreRepository _repository;
+        private readonly IProductStoreServices _productStoreServices;
 
-        public ProductStoreController(IProductStoreRepository repository)
-        {
-            _repository = repository;
+        public ProductStoreController(IProductStoreServices services){
+            _productStoreServices = services;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductStore>>> GetProductStores()
         {
-            var productStores = await _repository.GetProductStoresAsync();
+            var productStores = await _productStoreServices.GetProductStoresAsync();
             return Ok(productStores);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductStore>> GetProductStoreById(int id)
         {
-            var productStore = await _repository.GetProductStoreByIdAsync(id);
+            var productStore = await _productStoreServices.GetProductStoreByIdAsync(id);
             if (productStore == null)
             {
                 return NotFound();
@@ -38,41 +37,28 @@ namespace DynamicStore.Controllers
         [HttpPost]
         public async Task<ActionResult<ProductStore>> AddProductStore(ProductStore productStore)
         {
-            var newProductStore = await _repository.AddProductStoreAsync(productStore);
-            return CreatedAtAction(nameof(GetProductStoreById), new { id = newProductStore.Id }, newProductStore);
+            var newProductStore = await _productStoreServices.AddProductStoreAsync(productStore);
+            return Ok(newProductStore);
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult<ProductStore>> UpdateProductStoreAsync(int id, ProductStore productStore)
         {
-            var existingProductStore = await _repository.GetProductStoreByIdAsync(id);
-
-            if (existingProductStore == null)
+            var updatedProductStore = await _productStoreServices.UpdateProductStoreAsync(id, productStore);
+            if(updatedProductStore == null)
             {
                 return NotFound();
             }
-
-            if (productStore.ProductId != null)
-            {
-                existingProductStore.ProductId = productStore.ProductId;
-            }
-
-            if (productStore.StoreId != null)
-            {
-                existingProductStore.StoreId = productStore.StoreId;
-            }
-
-            var updatedProductStore = await _repository.UpdateProductStoreAsync(id, existingProductStore);
             return Ok(updatedProductStore);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<bool>> DeleteProductStoreAsync(int id)
         {
-            var deleted = await _repository.DeleteProductStoreAsync(id);
+            var deleted = await _productStoreServices.DeleteProductStoreAsync(id);
             if (deleted)
             {
-                return Ok(true);
+                return Ok();
             }
             return NotFound();
         }
