@@ -1,10 +1,9 @@
 using DynamicStore.Models;
-using DynamicStoreBackend.Models;
-using DynamicStoreBackend.Repositories;
+using DynamicStore.Repository;
+using DynamicStore.Interface;
 using DynamicStore.DTO;
-using System.Collections.Generic;
 
-namespace DynamicStoreBackend.Services
+namespace DynamicStore.Services
 {
     public class RevenueServices : IRevenueServices
     {
@@ -51,7 +50,7 @@ namespace DynamicStoreBackend.Services
 
               if (revenue.Type != null)
             {
-                existingRevenue.Type = (Models.RevenueType)revenue.Type;
+                existingRevenue.Type = (DynamicStore.Models.RevenueType)revenue.Type;
             }
 
             var updatedRevenue = await _revenueRepository.UpdateAsync(revenueId, existingRevenue);

@@ -1,10 +1,10 @@
 ﻿using DynamicStore.Data;
-using DynamicStoreBackend.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using DynamicStore.Models;
+using DynamicStore.Interface;
 
-public class FinanceModuleRepository : IFinanceModuleRepository
+namespace DynamicStore.Repository 
+{
+public class FinanceModuleRepository /*: IFinanceModuleRepository*/
 {
     private readonly DataContext _dbContext;
 
@@ -75,4 +75,5 @@ public class FinanceModuleRepository : IFinanceModuleRepository
 
         return revenues - expenses - taxes;
     }
+}
 }

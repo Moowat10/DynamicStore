@@ -1,5 +1,4 @@
 ﻿using DynamicStore.Models;
-using DynamicStoreBackend.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DynamicStore.Data

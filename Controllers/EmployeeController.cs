@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using DynamicStore.DTO;
+﻿using DynamicStore.DTO;
 using DynamicStore.Interface;
 using DynamicStore.Models;
 using Microsoft.AspNetCore.Mvc;

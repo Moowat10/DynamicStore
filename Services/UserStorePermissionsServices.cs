@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using DynamicStore.Data;
+﻿using DynamicStore.Data;
 using DynamicStore.Interface;
 using DynamicStore.Models;
 using DynamicStore.Repository;

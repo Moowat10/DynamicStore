@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿
 using DynamicStore.DTO;
 
-namespace DynamicStore.Services
+namespace DynamicStore.Interface
 {
     public interface IStoreServices
     {

@@ -1,8 +1,5 @@
-﻿using System.Threading.Tasks;
-using DynamicStore.Data;
-using DynamicStore.Models;
+﻿using DynamicStore.Models;
 using DynamicStore.DTO;
-using DynamicStore.Services;
 using Microsoft.AspNetCore.Mvc;
 using DynamicStore.Interface;
 

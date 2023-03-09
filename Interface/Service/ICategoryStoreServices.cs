@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using DynamicStore.Models;
+﻿using DynamicStore.Models;
 
 namespace DynamicStore.Interface
 {

@@ -2,9 +2,6 @@
 using DynamicStore.Models;
 using DynamicStore.DTO;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using DynamicStore.Interfaces;
 
 namespace DynamicStore.Controllers
 {

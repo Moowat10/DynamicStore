@@ -1,7 +1,4 @@
-﻿using DynamicStore.Models;
-using System.ComponentModel.DataAnnotations;
-
-namespace DynamicStore.DTO
+﻿namespace DynamicStore.DTO
 {
     public class UpdateStoreDTO
     {

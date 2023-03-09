@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using DynamicStore.Data;
+﻿using DynamicStore.Data;
 using DynamicStore.Interface;
-using DynamicStore.Repository;
 using DynamicStore.Models;
-using Microsoft.EntityFrameworkCore;
 
-namespace DynamicStore.Repositories
+namespace DynamicStore.Repository
 {
     public class EmployeeRepository : Repository<Employee>, IEmployeeRepository
     {

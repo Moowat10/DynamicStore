@@ -1,10 +1,10 @@
 ﻿
 using DynamicStore.Data;
-using DynamicStoreBackend.Models;
-using DynamicStore.Repository;
+using DynamicStore.Models;
+using DynamicStore.Interface;
 using Microsoft.EntityFrameworkCore;
 
-namespace DynamicStoreBackend.Repositories
+namespace DynamicStore.Repository
 {
     public class RevenueRepository : Repository<Revenue> , IRevenueRepository
     {

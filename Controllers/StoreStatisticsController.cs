@@ -1,7 +1,6 @@
 ﻿using DynamicStore.Interface;
 using DynamicStore.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
 namespace DynamicStore.Controllers
 {

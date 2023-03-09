@@ -1,10 +1,9 @@
 ﻿using DynamicStore.DTO;
-using DynamicStoreBackend.Models;
-using DynamicStoreBackend.Repositories;
+using DynamicStore.Models;
+using DynamicStore.Interface;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 
-namespace DynamicStoreBackend.Controllers
+namespace DynamicStore.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

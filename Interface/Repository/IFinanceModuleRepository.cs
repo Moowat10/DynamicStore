@@ -1,5 +1,8 @@
-﻿using DynamicStoreBackend.Models;
+﻿using DynamicStore.Models;
 
+
+namespace DynamicStore.Interface
+{
 public interface IFinanceModuleRepository
 {
     // Retrieve all revenues within a given date range
@@ -35,4 +38,5 @@ public interface IFinanceModuleRepository
     public decimal GetNetProfit(DateTime startDate, DateTime endDate);
 
 
+}
 }

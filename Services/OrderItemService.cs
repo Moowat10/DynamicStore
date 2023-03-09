@@ -1,8 +1,7 @@
 using DynamicStore.Interface;
 using DynamicStore.Models;
 using DynamicStore.DTO;
-using DynamicStore.Repositories;
-using System.Threading.Tasks;
+using DynamicStore.Repository;
 
 namespace DynamicStore.Services
 {

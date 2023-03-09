@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-
+﻿
 namespace DynamicStore.Interface
 {
     public interface IRepository<T> where T : class

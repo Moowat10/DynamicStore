@@ -1,11 +1,7 @@
 using DynamicStore.Data;
 using DynamicStore.Interface;
 using DynamicStore.Repository;
-using DynamicStore.Repositories;
-using DynamicStoreBackend.Repositories;
-using DynamicStoreBackend.Services;
 using DynamicStore.Services;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +16,7 @@ builder.Services.AddScoped<ICategoryStoreServices, CategoryStoreServices>();
 builder.Services.AddScoped<IProductStoreServices, ProductStoreServices>();
 builder.Services.AddScoped<IRevenueServices, RevenueServices>();
 builder.Services.AddScoped<IStorePermissionServices, StorePermissionServices>();
+builder.Services.AddScoped<IUserStorePermissionServices, UserStorePermissionsServices>();
 builder.Services.AddScoped<IStoreServices, StoreServices>();
 builder.Services.AddScoped<IWarehouseServices, WarehouseServices>();
 builder.Services.AddScoped<IEmployeeServices, EmployeeServices>();
@@ -36,6 +33,7 @@ builder.Services.AddScoped<CategoryStoreRepository>();
 builder.Services.AddScoped<ProductStoreRepository>();
 builder.Services.AddScoped<RevenueRepository>();
 builder.Services.AddScoped<StorePermissionRepository>();
+builder.Services.AddScoped<UserStorePermissionRepository>();
 builder.Services.AddScoped<StoreRepository>();
 builder.Services.AddScoped<WarehouseRepository>();
 builder.Services.AddScoped<EmployeeRepository>();

@@ -1,5 +1,4 @@
-﻿using static System.Formats.Asn1.AsnWriter;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
 namespace DynamicStore.Models

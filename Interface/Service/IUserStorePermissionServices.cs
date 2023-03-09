@@ -1,6 +1,4 @@
 ﻿using DynamicStore.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace DynamicStore.Interface
 {
@@ -11,6 +9,8 @@ namespace DynamicStore.Interface
         Task<UserStorePermission> AddUserStorePermissionAsync(UserStorePermission permission);
         Task<UserStorePermission> UpdateUserStorePermissionAsync(int id, UserStorePermission permission);
         Task<bool> DeleteUserStorePermissionAsync(int id);
+        Task<IEnumerable<UserStorePermission>> GetUserStorePermissionsByUserIdAsync(int userId);
+        Task<IEnumerable<UserStorePermission>> GetUserStorePermissionsByStoreIdAsync(int storeId);
 
     }
 }

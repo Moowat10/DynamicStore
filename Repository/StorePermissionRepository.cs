@@ -2,7 +2,6 @@
 using DynamicStore.Interface;
 using DynamicStore.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace DynamicStore.Repository
 {

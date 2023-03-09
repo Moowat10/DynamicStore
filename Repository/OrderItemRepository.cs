@@ -1,13 +1,9 @@
 ﻿using DynamicStore.Data;
-using DynamicStore.Repository;
-using DynamicStore.Interfaces;
+using DynamicStore.Interface;
 using DynamicStore.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace DynamicStore.Repositories
+namespace DynamicStore.Repository
 {
     public class OrderItemRepository :  Repository<OrderItem>, IOrderItemRepository
     {

@@ -1,8 +1,7 @@
-﻿using DynamicStore.Models;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace DynamicStoreBackend.Models
+namespace DynamicStore.Models
 {
     public enum TaxType
     {

@@ -1,7 +1,5 @@
 ﻿using DynamicStore.Models;
 using DynamicStore.DTO;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace DynamicStore.Interface
 {

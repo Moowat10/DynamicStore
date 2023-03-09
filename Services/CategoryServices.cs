@@ -1,9 +1,6 @@
-using DynamicStore.Data;
 using DynamicStore.Interface;
 using DynamicStore.Models;
 using DynamicStore.Repository;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
 
 
 namespace DynamicStore.Services

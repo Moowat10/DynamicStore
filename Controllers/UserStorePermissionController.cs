@@ -1,8 +1,5 @@
-﻿using System.Threading.Tasks;
-using DynamicStore.Data;
-using DynamicStore.Interface;
+﻿using DynamicStore.Interface;
 using DynamicStore.Models;
-using DynamicStore.Services;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -12,11 +9,11 @@ namespace DynamicStore.Controllers
     [Route("api/[controller]")]
     public class UserStorePermissionsController : ControllerBase
     {
-        private readonly UserStorePermissionsServices _userStorePermissionsServices;
+        private readonly IUserStorePermissionServices _userStorePermissionsServices;
 
-        public UserStorePermissionsController(DataContext context)
+        public UserStorePermissionsController(IUserStorePermissionServices userStorePermissionsServices)
         {
-            _userStorePermissionsServices = new UserStorePermissionsServices(context);
+            _userStorePermissionsServices = userStorePermissionsServices;
         }
 
         [HttpGet]

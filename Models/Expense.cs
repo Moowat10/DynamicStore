@@ -1,9 +1,7 @@
-﻿using DynamicStoreBackend.Models;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using DynamicStore.Models;
 
-namespace DynamicStoreBackend.Models
+namespace DynamicStore.Models
 {
     public enum ExpenseType
     {

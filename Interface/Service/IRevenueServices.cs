@@ -1,7 +1,7 @@
-﻿using DynamicStoreBackend.Models;
+﻿using DynamicStore.Models;
 using DynamicStore.DTO;
 
-namespace DynamicStoreBackend.Repositories
+namespace DynamicStore.Interface
 {
     public interface IRevenueServices
     {
