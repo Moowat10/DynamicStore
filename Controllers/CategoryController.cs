@@ -1,7 +1,5 @@
-﻿using DynamicStore.Data;
-using DynamicStore.Interface;
+﻿using DynamicStore.Interface;
 using DynamicStore.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -11,57 +9,70 @@ namespace DynamicStore.Controllers
     [Route("api/categories")]
     public class CategoryController : ControllerBase
     {
-        private readonly DataContext _dbContext;
+        private readonly ICategoryServices _categoryServices;
 
-        public CategoryController(DataContext dbContext)
+        public CategoryController(ICategoryServices categoryServices)
         {
-            _dbContext = dbContext;
+            _categoryServices = categoryServices;
         }
         [HttpGet]
-        public async Task<IEnumerable<Category>> GetCategoriesAsync()
+        public async Task<ActionResult<IEnumerable<Category>>> GetCategoriesAsync()
         {
-            return await _dbContext.Categories.ToListAsync();
+            var category = await _categoryServices.GetCategoriesAsync();
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(category);
         }
 
         [HttpGet("{id}")]
-        public async Task<Category> GetCategoryByIdAsync(int categoryId)
+        public async Task<ActionResult<Category>> GetCategoryByIdAsync(int categoryId)
         {
-            return await _dbContext.Categories.FindAsync(categoryId);
+            var category = await _categoryServices.GetCategoryByIdAsync(categoryId);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(category);
         }
         [HttpPost]
-        public async Task<Category> AddCategoryAsync(Category category)
+        public async  Task<ActionResult<Category>> AddCategoryAsync(Category category)
         {
-            await _dbContext.Categories.AddAsync(category);
-            await _dbContext.SaveChangesAsync();
-            return category;
+             var addedCategory = await _categoryServices.AddCategoryAsync(category);
+            return Ok(addedCategory);
         }
         [HttpPut("{id}")]
-        public async Task<Category> UpdateCategoryAsync(int categoryId, Category category)
+        public async Task<ActionResult<Category>> UpdateCategoryAsync(int categoryId, Category category)
         {
-            var existingCategory = await _dbContext.Categories.FindAsync(categoryId);
-            if (existingCategory != null)
+            if (categoryId != category.CategoryId)
             {
-                existingCategory.CategoryName = category.CategoryName;
-                existingCategory.CategoryDescription = category.CategoryDescription;
-
-                _dbContext.Categories.Update(existingCategory);
-                await _dbContext.SaveChangesAsync();
-
-                return existingCategory;
+                return BadRequest();
             }
-            return null;
+
+            var existingCategory =  await _categoryServices.UpdateCategoryAsync(categoryId, category);
+
+            if(existingCategory == null)
+            {
+                NotFound();
+            }
+
+            return Ok(existingCategory);
         }
         [HttpDelete("{id}")]
-        public async Task<bool> DeleteCategoryAsync(int categoryId)
+        public async Task<IActionResult> DeleteCategoryAsync(int categoryId)
         {
-            var existingCategory = await _dbContext.Categories.FindAsync(categoryId);
-            if (existingCategory != null)
+            var category = await _categoryServices.DeleteCategoryAsync(categoryId);
+
+            if (!category)
             {
-                _dbContext.Categories.Remove(existingCategory);
-                await _dbContext.SaveChangesAsync();
-                return true;
+                return NotFound();
             }
-            return false;
+            return Ok();
         }
     }
 }

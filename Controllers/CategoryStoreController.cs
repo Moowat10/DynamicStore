@@ -10,102 +10,109 @@ namespace DynamicStore.Controllers
     [Route("api/[controller]")]
     public class CategoryStoreController : ControllerBase
     {
-        private readonly ICategoryStoreRepository _categoryStoreRepository;
+        private readonly ICategoryStoreServices _categoryStoreServices;
 
-        public CategoryStoreController(ICategoryStoreRepository categoryStoreRepository)
+        public CategoryStoreController(ICategoryStoreServices categoryStoreServices)
         {
-            _categoryStoreRepository = categoryStoreRepository;
+            _categoryStoreServices = categoryStoreServices;
         }
 
         // GET: api/CategoryStore
         [HttpGet]
-        public async Task<IEnumerable<CategoryStore>> GetCategoryStoresAsync()
+        public async Task<ActionResult<IEnumerable<Store>>> GetCategoryStoresAsync()
         {
-            return await _categoryStoreRepository.GetCategoryStoresAsync();
+            var categoryStores = await _categoryStoreServices.GetCategoryStoresAsync();
+
+            if (categoryStores == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(categoryStores);
         }
 
         // GET: api/CategoryStore/ByCategory/{categoryId}
         [HttpGet("ByCategory/{categoryId}")]
-        public async Task<IEnumerable<Store>> GetStoresByCategoryIdAsync(int categoryId)
+        public async Task<ActionResult<IEnumerable<Store>>> GetStoresByCategoryIdAsync(int categoryId)
         {
-            return await _categoryStoreRepository.GetStoresByCategoryIdAsync(categoryId);
+             var categoryStores = await _categoryStoreServices.GetStoresByCategoryIdAsync(categoryId);
+
+            if (categoryStores == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(categoryStores);
         }
 
         // GET: api/CategoryStore/ByStore/{storeId}
         [HttpGet("ByStore/{storeId}")]
-        public async Task<IEnumerable<Category>> GetCategoriesByStoreIdAsync(int storeId)
+        public async  Task<ActionResult<IEnumerable<Store>>> GetCategoriesByStoreIdAsync(int storeId)
         {
-            return await _categoryStoreRepository.GetCategoriesByStoreIdAsync(storeId);
+             var categoryStores = await _categoryStoreServices.GetCategoriesByStoreIdAsync(storeId);
+
+            if (categoryStores == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(categoryStores);
+            
         }
 
         // GET: api/CategoryStore/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<CategoryStore>> GetCategoryStoreByIdAsync(int id)
         {
-            var categoryStore = await _categoryStoreRepository.GetCategoryStoreByIdAsync(id);
+            var categoryStore = await _categoryStoreServices.GetCategoryStoreByIdAsync(id);
 
             if (categoryStore == null)
             {
                 return NotFound();
             }
 
-            return categoryStore;
+            return Ok(categoryStore);
         }
 
         // POST: api/CategoryStore
         [HttpPost]
         public async Task<ActionResult<CategoryStore>> AddCategoryStoreAsync(CategoryStore categoryStore)
         {
-            var addedCategoryStore = await _categoryStoreRepository.AddCategoryStoreAsync(categoryStore);
+            var addedCategoryStore = await _categoryStoreServices.AddCategoryStoreAsync(categoryStore);
 
-            return CreatedAtAction(nameof(GetCategoryStoreByIdAsync), new { id = addedCategoryStore.Id }, addedCategoryStore);
+            return Ok(addedCategoryStore);
         }
 
         // PUT: api/CategoryStore/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCategoryStoreAsync(int id, CategoryStore categoryStore)
+        public async Task<ActionResult<CategoryStore>> UpdateCategoryStoreAsync(int id, CategoryStore categoryStore)
         {
             if (id != categoryStore.Id)
             {
                 return BadRequest();
             }
 
-            var existingCategoryStore = await _categoryStoreRepository.GetCategoryStoreByIdAsync(id);
+            var existingCategoryStore =  await _categoryStoreServices.UpdateCategoryStoreAsync(id, categoryStore);
 
-            if (existingCategoryStore == null)
+            if(existingCategoryStore == null)
             {
-                return NotFound();
+                NotFound();
             }
 
-            if (categoryStore.CategoryId == null)
-            {
-                categoryStore.CategoryId = existingCategoryStore.CategoryId;
-            }
-
-            if (categoryStore.StoreId == null)
-            {
-                categoryStore.StoreId = existingCategoryStore.StoreId;
-            }
-
-            await _categoryStoreRepository.UpdateCategoryStoreAsync(id, categoryStore);
-
-            return NoContent();
+            return Ok(existingCategoryStore);
         }
 
         // DELETE: api/CategoryStore/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategoryStoreAsync(int id)
         {
-            var categoryStore = await _categoryStoreRepository.GetCategoryStoreByIdAsync(id);
+            var categoryStore = await _categoryStoreServices.DeleteCategoryStoreAsync(id);
 
-            if (categoryStore == null)
+            if (!categoryStore)
             {
                 return NotFound();
             }
-
-            await _categoryStoreRepository.DeleteCategoryStoreAsync(id);
-
-            return NoContent();
+            return Ok();
         }
     }
 }

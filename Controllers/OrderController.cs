@@ -11,17 +11,17 @@ namespace DynamicStore.Controllers
     [Route("api/[controller]")]
     public class OrderController : ControllerBase
     {
-        private readonly IOrderRepository _orderRepository;
+        private readonly IOrderServices _orderServices;
 
-        public OrderController(IOrderRepository orderRepository)
+        public OrderController(IOrderServices orderServices)
         {
-            _orderRepository = orderRepository;
+            _orderServices = orderServices;
         }
 
         [HttpGet]
         public async Task<IEnumerable<OrderDTO>> GetAllOrdersAsync()
         {
-            var orders = await _orderRepository.GetOrdersAsync();
+            var orders = await _orderServices.GetOrdersAsync();
             var orderDTOs = orders.Select(order => new OrderDTO
             {
                 OrderId = order.OrderId,
@@ -37,7 +37,7 @@ namespace DynamicStore.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<OrderDTO>> GetOrderByIdAsync(int id)
         {
-            var order = await _orderRepository.GetOrderByIdAsync(id);
+            var order = await _orderServices.GetOrderByIdAsync(id);
 
             if (order == null)
             {
@@ -57,68 +57,34 @@ namespace DynamicStore.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<OrderDTO>> CreateOrderAsync(OrderDTO orderDTO)
+        public async Task<ActionResult<OrderDTO>> AddOrderAsync(OrderDTO orderDTO)
         {
-            var order = new Order
-            {
-                OrderDate = orderDTO.OrderDate,
-                OrderTotal = orderDTO.OrderTotal,
-                CustomerName = orderDTO.CustomerName,
-                CustomerEmail = orderDTO.CustomerEmail
-            };
-
-            var createdOrder = await _orderRepository.AddOrderAsync(order);
-
-            var createdOrderDTO = new OrderDTO
-            {
-                OrderId = createdOrder.OrderId,
-                OrderDate = createdOrder.OrderDate,
-                OrderTotal = createdOrder.OrderTotal,
-                CustomerName = createdOrder.CustomerName,
-                CustomerEmail = createdOrder.CustomerEmail
-
-            };
-
-            return CreatedAtAction(nameof(GetOrderByIdAsync), new { id = createdOrderDTO.OrderId }, createdOrderDTO);
+         
+            var createdOrder = await _orderServices.AddOrderAsync(orderDTO);
+            return createdOrder;
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateOrderAsync(int id, OrderDTO orderDTO)
+        public async Task<ActionResult<Order>> UpdateOrderAsync(int id, OrderDTO orderDTO)
         {
-            var existingOrder = await _orderRepository.GetOrderByIdAsync(id);
-
-            if (existingOrder == null)
+            var updatedOrder = await _orderServices.UpdateOrderAsync(id, orderDTO);
+            if (updatedOrder == null)
             {
                 return NotFound();
             }
-
-            var order = new Order
-            {
-                OrderId = id,
-                OrderDate = orderDTO.OrderDate,
-                OrderTotal = orderDTO.OrderTotal,
-                CustomerName = orderDTO.CustomerName,
-                CustomerEmail = orderDTO.CustomerEmail
-            };
-
-            await _orderRepository.UpdateOrderAsync(id, order);
-
-            return NoContent();
+            return Ok(updatedOrder);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrderAsync(int id)
         {
-            var existingOrder = await _orderRepository.GetOrderByIdAsync(id);
+            var existingOrder = await  _orderServices.DeleteOrderAsync(id);
 
-            if (existingOrder == null)
+            if (!existingOrder)
             {
                 return NotFound();
             }
-
-            await _orderRepository.DeleteOrderAsync(existingOrder.OrderId);
-
-            return NoContent();
+            return Ok();
         }
     }
 }

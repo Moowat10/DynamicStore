@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using DynamicStore.DTO;
-using DynamicStore.Interfaces;
+using DynamicStore.Interface;
 using DynamicStore.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,24 +12,24 @@ namespace DynamicStore.Controllers
     [Route("api/[controller]")]
     public class EmployeeController : ControllerBase
     {
-        private readonly IEmployeeRepository _employeeRepository;
+        private readonly IEmployeeServices _employeeServices;
 
-        public EmployeeController(IEmployeeRepository employeeRepository)
+        public EmployeeController(IEmployeeServices employeeServices)
         {
-            _employeeRepository = employeeRepository;
+            _employeeServices = employeeServices;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Employee>>> GetEmployeesAsync()
         {
-            var employees = await _employeeRepository.GetEmployeesAsync();
+            var employees = await _employeeServices.GetEmployeesAsync();
             return Ok(employees);
         }
 
         [HttpGet("{employeeId}")]
         public async Task<ActionResult<Employee>> GetEmployeeByIdAsync(int employeeId)
         {
-            var employee = await _employeeRepository.GetEmployeeByIdAsync(employeeId);
+            var employee = await _employeeServices.GetEmployeeByIdAsync(employeeId);
             if (employee == null)
             {
                 return NotFound();
@@ -41,9 +41,9 @@ namespace DynamicStore.Controllers
         [HttpPost]
         public async Task<ActionResult<Employee>> AddEmployeeAsync(Employee employee)
         {
-            var newEmployee = await _employeeRepository.AddEmployeeAsync(employee);
+            var newEmployee = await _employeeServices.AddEmployeeAsync(employee);
 
-            return CreatedAtAction(nameof(GetEmployeeByIdAsync), new { employeeId = newEmployee.UserId }, newEmployee);
+            return Ok(newEmployee);
         }
 
         [HttpPut("{employeeId}")]
@@ -54,28 +54,12 @@ namespace DynamicStore.Controllers
                 return BadRequest();
             }
 
-            var existingEmployee = await _employeeRepository.GetEmployeeByIdAsync(employeeId);
+            var updatedEmployee = await _employeeServices.UpdateEmployeeAsync(employeeId, employee);
 
-            if (existingEmployee == null)
+            if (updatedEmployee == null)
             {
                 return NotFound();
             }
-
-            if (employee.EmployeeName != null)
-                existingEmployee.EmployeeName = employee.EmployeeName;
-            if (employee.EmployeeAddress != null)
-                existingEmployee.EmployeeAddress = employee.EmployeeAddress;
-            if (employee.EmployeePhone != null)
-                existingEmployee.EmployeePhone = employee.EmployeePhone;
-            if (employee.EmployeeEmail != null)
-                existingEmployee.EmployeeEmail = employee.EmployeeEmail;
-            if (employee.EmployeeSalary != null)
-                existingEmployee.EmployeeSalary = (decimal)employee.EmployeeSalary;
-            
-            if (employee.UserId != null)
-                existingEmployee.UserId = (int)employee.UserId;
-
-            var updatedEmployee = await _employeeRepository.UpdateEmployeeAsync(employeeId, existingEmployee);
 
             return Ok(updatedEmployee);
         }
@@ -83,13 +67,13 @@ namespace DynamicStore.Controllers
         [HttpDelete("{employeeId}")]
         public async Task<ActionResult> DeleteEmployeeAsync(int employeeId)
         {
-            var result = await _employeeRepository.DeleteEmployeeAsync(employeeId);
+            var result = await _employeeServices.DeleteEmployeeAsync(employeeId);
             if (!result)
             {
                 return NotFound();
             }
 
-            return NoContent();
+            return Ok();
         }
     }
 

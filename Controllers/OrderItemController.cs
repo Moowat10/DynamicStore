@@ -12,23 +12,23 @@ namespace DynamicStore.Controllers
     [Route("api/[controller]")]
     public class OrderItemController : ControllerBase
     {
-        private readonly IOrderItemRepository _orderItemRepository;
+        private readonly IOrderItemService _orderItemServices;
 
-        public OrderItemController(IOrderItemRepository orderItemRepository)
+        public OrderItemController(IOrderItemService orderItemServices)
         {
-            _orderItemRepository = orderItemRepository;
+            _orderItemServices = orderItemServices;
         }
 
         [HttpGet]
         public async Task<IEnumerable<OrderItem>> GetOrderItemsAsync()
         {
-            return await _orderItemRepository.GetOrderItemsAsync();
+            return await _orderItemServices.GetOrderItemsAsync();
         }
 
         [HttpGet("{orderItemId}")]
         public async Task<ActionResult<OrderItem>> GetOrderItemByIdAsync(int orderItemId)
         {
-            var orderItem = await _orderItemRepository.GetOrderItemByIdAsync(orderItemId);
+            var orderItem = await _orderItemServices.GetOrderItemByIdAsync(orderItemId);
 
             if (orderItem == null)
             {
@@ -41,54 +41,39 @@ namespace DynamicStore.Controllers
         [HttpPost]
         public async Task<ActionResult<OrderItem>> AddOrderItemAsync(OrderItemDTO orderItemDto)
         {
-            var orderItem = new OrderItem
-            {
-                OrderId = orderItemDto.OrderId,
-                ProductId = orderItemDto.ProductId,
-                Quantity = orderItemDto.Quantity,
-                Price = orderItemDto.Price
-            };
-
-            var addedOrderItem = await _orderItemRepository.AddOrderItemAsync(orderItem);
-            return CreatedAtAction(nameof(GetOrderItemByIdAsync), new { orderItemId = addedOrderItem.OrderItemId }, addedOrderItem);
+            var addedOrderItem = await _orderItemServices.AddOrderItemAsync(orderItemDto);
+            return addedOrderItem;
         }
 
         [HttpPut("{orderItemId}")]
-        public async Task<IActionResult> UpdateOrderItemAsync(int orderItemId, OrderItemDTO orderItemDto)
+        public async Task<ActionResult<OrderItem>> UpdateOrderItemAsync(int orderItemId, OrderItemDTO orderItemDto)
         {
             if (orderItemId != orderItemDto.OrderItemId)
             {
                 return BadRequest();
             }
 
-            var existingOrderItem = await _orderItemRepository.GetOrderItemByIdAsync(orderItemId);
+            var updatedOrderItem =  await _orderItemServices.UpdateOrderItemAsync(orderItemId, orderItemDto);
 
-            if (existingOrderItem == null)
+            if (updatedOrderItem == null)
             {
                 return NotFound();
             }
-
-            existingOrderItem.Quantity = orderItemDto.Quantity;
-            existingOrderItem.Price = orderItemDto.Price;
-
-            await _orderItemRepository.UpdateOrderItemAsync(orderItemId, existingOrderItem);
-
-            return NoContent();
+    
+            return Ok(updatedOrderItem);
         }
 
         [HttpDelete("{orderItemId}")]
         public async Task<IActionResult> DeleteOrderItemAsync(int orderItemId)
         {
-            var existingOrderItem = await _orderItemRepository.GetOrderItemByIdAsync(orderItemId);
+            var existingOrderItem = await _orderItemServices.DeleteOrderItemAsync(orderItemId);
 
-            if (existingOrderItem == null)
+            if (!existingOrderItem)
             {
                 return NotFound();
             }
 
-            await _orderItemRepository.DeleteOrderItemAsync(orderItemId);
-
-            return NoContent();
+            return Ok();
         }
     }
 }

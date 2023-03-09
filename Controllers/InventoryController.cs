@@ -2,7 +2,7 @@
 using DynamicStore.Models;
 using Microsoft.AspNetCore.Mvc;
 using DynamicStore.DTO;
-using DynamicStore.DTO.DynamicStore.DTOs;
+
 
 namespace DynamicStore.Controllers
 {
@@ -10,23 +10,23 @@ namespace DynamicStore.Controllers
     [Route("api/[controller]")]
     public class InventoryController : ControllerBase
     {
-        private readonly IInventoryRepository _inventoryRepository;
+        private readonly IInventoryServices _inventoryServices;
 
-        public InventoryController(IInventoryRepository inventoryRepository)
+        public InventoryController(IInventoryServices inventoryServices)
         {
-            _inventoryRepository = inventoryRepository;
+            _inventoryServices = inventoryServices;
         }
 
         [HttpGet]
         public async Task<IEnumerable<Inventory>> GetInventoryAsync()
         {
-            return await _inventoryRepository.GetAllInventoryAsync();
+            return await _inventoryServices.GetAllInventoryAsync();
         }
 
         [HttpGet("{inventoryId}")]
         public async Task<ActionResult<Inventory>> GetInventoryByIdAsync(int inventoryId)
         {
-            var inventory = await _inventoryRepository.GetInventoryByIdAsync(inventoryId);
+            var inventory = await _inventoryServices.GetInventoryByIdAsync(inventoryId);
 
             if (inventory == null)
             {
@@ -47,48 +47,79 @@ namespace DynamicStore.Controllers
                 InventoryAlertQuantity = inventoryDTO.InventoryAlertQuantity
             };
 
-            var addedInventory = await _inventoryRepository.CreateInventoryAsync(inventory);
-            return CreatedAtAction(nameof(GetInventoryByIdAsync), new { inventoryId = addedInventory.InventoryId }, addedInventory);
+            var addedInventory = await _inventoryServices.AddInventoryAsync(inventory);
+            return addedInventory;
         }
 
         [HttpPut("{inventoryId}")]
-        public async Task<IActionResult> UpdateInventoryAsync(int inventoryId, InventoryDTO inventoryDTO)
+        public async Task<ActionResult<Inventory>> UpdateInventoryAsync(int inventoryId, InventoryDTO inventoryDTO)
         {
             if (inventoryId != inventoryDTO.InventoryId)
             {
                 return BadRequest();
             }
 
-            var existingInventory = await _inventoryRepository.GetInventoryByIdAsync(inventoryId);
+            var updatedInventory = await _inventoryServices.UpdateInventoryAsync(inventoryId, inventoryDTO);
 
-            if (existingInventory == null)
+            if (updatedInventory == null)
             {
                 return NotFound();
+            
             }
-
-           
-            existingInventory.WarehouseId = inventoryDTO.WarehouseId;
-            existingInventory.InventoryQuantity = inventoryDTO.InventoryQuantity;
-            existingInventory.InventoryAlertQuantity = inventoryDTO.InventoryAlertQuantity;
-
-            await _inventoryRepository.UpdateInventoryAsync(existingInventory);
-
-            return NoContent();
+            return Ok(updatedInventory);
         }
 
         [HttpDelete("{inventoryId}")]
         public async Task<IActionResult> DeleteInventoryAsync(int inventoryId)
         {
-            var existingInventory = await _inventoryRepository.GetInventoryByIdAsync(inventoryId);
+            var existingInventory =  await _inventoryServices.DeleteInventoryAsync(inventoryId);
 
-            if (existingInventory == null)
+            if (!existingInventory)
             {
                 return NotFound();
             }
 
-            await _inventoryRepository.DeleteInventoryAsync(existingInventory);
-
-            return NoContent();
+            return Ok();
+        }
+        [HttpGet("TotalInventoryQuantity/{warehouseId}")]
+           public async Task<ActionResult<int>> GetTotalInventoryQuantityAsync(int warehouseId)
+        {
+            var result = await _inventoryServices.GetTotalInventoryQuantityAsync(warehouseId);
+            if (result == 0)
+            {
+                return NotFound();
+            }
+            return Ok(result);
+        }
+        [HttpGet("TotalInventoryAlertQuantity/{warehouseId}")]
+        public async  Task<ActionResult<int>> GetTotalInventoryAlertQuantityAsync(int warehouseId)
+        {
+            var result = await _inventoryServices.GetTotalInventoryAlertQuantityAsync(warehouseId);
+            if (result == 0)
+            {
+                return NotFound();
+            }
+            return Ok(result);
+        }
+        [HttpGet("{warehouseId}")]
+        public async Task<ActionResult<IEnumerable<Inventory>>> GetInventoryByWarehouseIdAsync(int warehouseId)
+        {
+            var inventories = await _inventoryServices.GetInventoryByWarehouseIdAsync(warehouseId);
+            if (inventories == null)
+            {
+                return NotFound();
+            }
+            return Ok(inventories);
+        }
+        [HttpGet("GetLowInventories/{threshold}")]
+        public async Task<ActionResult<IEnumerable<Inventory>>> GetLowInventoryAsync(int threshold)
+        {
+            var inventories = await _inventoryServices.GetLowInventoryAsync(threshold);
+            if (inventories == null)
+            {
+                return NotFound();
+            }
+            return Ok(inventories);
         }
     }
 }

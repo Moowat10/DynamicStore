@@ -10,24 +10,24 @@ namespace DynamicStore.Controllers
     [Route("api/[controller]")]
     public class ProductCategoryController : ControllerBase
     {
-        private readonly IProductCategoryRepository _repository;
+        private readonly IProductCategoryServices _productCategoryServices;
 
-        public ProductCategoryController(IProductCategoryRepository repository)
+        public ProductCategoryController(IProductCategoryServices Services)
         {
-            _repository = repository;
+            _productCategoryServices = Services;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductCategory>>> GetProductCategoriesAsync()
         {
-            var productCategories = await _repository.GetProductCategoriesAsync();
+            var productCategories = await _productCategoryServices.GetProductCategoriesAsync();
             return Ok(productCategories);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductCategory>> GetProductCategoryByIdAsync(int id)
         {
-            var productCategory = await _repository.GetProductCategoryByIdAsync(id);
+            var productCategory = await _productCategoryServices.GetProductCategoryByIdAsync(id);
 
             if (productCategory == null)
             {
@@ -36,50 +36,61 @@ namespace DynamicStore.Controllers
 
             return Ok(productCategory);
         }
+        [HttpGet("{productId}")]
+        public async Task<ActionResult<IEnumerable<ProductCategory>>> GetProductCategoriesByProductIdAsync(int productId)
+        {
+            var productCategories = await _productCategoryServices.GetProductCategoriesByProductIdAsync(productId);
 
+            if (productCategories == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(productCategories);
+        }
+         [HttpGet("{categoryId}")]
+        public async Task<ActionResult<IEnumerable<ProductCategory>>> GetProductCategoriesByCategoryIdAsync(int categoryId)
+        {
+            var categoryProducts = await _productCategoryServices.GetProductCategoriesByCategoryIdAsync(categoryId);
+
+            if (categoryProducts == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(categoryProducts);
+        }
         [HttpPost]
         public async Task<ActionResult<ProductCategory>> AddProductCategoryAsync(ProductCategory productCategory)
         {
-            var createdProductCategory = await _repository.AddProductCategoryAsync(productCategory);
-            return CreatedAtAction(nameof(AddProductCategoryAsync), new { id = createdProductCategory.Id }, createdProductCategory);
+            var createdProductCategory = await _productCategoryServices.AddProductCategoryAsync(productCategory);
+            return Ok(createdProductCategory);
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult<ProductCategory>> UpdateProductCategoryAsync(int id, ProductCategory productCategory)
         {
-            var existingProductCategory = await _repository.GetProductCategoryByIdAsync(id);
+            var updatedProductCategory = await _productCategoryServices.UpdateProductCategoryAsync(id, productCategory);
 
-            if (existingProductCategory == null)
+            if (updatedProductCategory == null)
             {
                 return NotFound();
             }
-
-            if (productCategory.CategoryId != 0)
-            {
-                existingProductCategory.CategoryId = productCategory.CategoryId;
-            }
-
-            if (productCategory.ProductId != 0)
-            {
-                existingProductCategory.ProductId = productCategory.ProductId;
-            }
-
-            var updatedProductCategory = await _repository.UpdateProductCategoryAsync(id, existingProductCategory);
+           
             return Ok(updatedProductCategory);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteProductCategoryAsync(int id)
         {
-            var existingProductCategory = await _repository.GetProductCategoryByIdAsync(id);
+            var existingProductCategory =  await _productCategoryServices.DeleteProductCategoryAsync(id);
 
-            if (existingProductCategory == null)
+            if (!existingProductCategory)
             {
                 return NotFound();
             }
 
-            await _repository.DeleteProductCategoryAsync(id);
-            return NoContent();
+            return Ok();
         }
     }
 }

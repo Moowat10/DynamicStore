@@ -9,77 +9,68 @@ namespace DynamicStore.Controllers
     [Route("api/[controller]")]
     public class WarehouseController : ControllerBase
     {
-        private readonly IWarehouseRepository _warehouseRepository;
+        private readonly IWarehouseServices _warehouseServices;
 
-        public WarehouseController(IWarehouseRepository warehouseRepository)
+        public WarehouseController(IWarehouseServices warehouseServices)
         {
-            _warehouseRepository = warehouseRepository;
+            _warehouseServices = warehouseServices;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Warehouse>> GetWarehousesAsync()
+        public async Task<ActionResult<IEnumerable<Warehouse>>> GetWarehousesAsync()
         {
-            return await _warehouseRepository.GetAllWarehousesAsync();
+            return Ok(await _warehouseServices.GetAllWarehousesAsync());
         }
 
         [HttpGet("{warehouseId}")]
         public async Task<ActionResult<Warehouse>> GetWarehouseByIdAsync(int warehouseId)
         {
-            var warehouse = await _warehouseRepository.GetWarehouseByIdAsync(warehouseId);
+            var warehouse = await _warehouseServices.GetWarehouseByIdAsync(warehouseId);
 
             if (warehouse == null)
             {
                 return NotFound();
             }
 
-            return warehouse;
+            return Ok(warehouse);
         }
 
         [HttpPost]
         public async Task<ActionResult<Warehouse>> CreateWarehouseAsync(Warehouse warehouse)
         {
-            var addedWarehouse = await _warehouseRepository.CreateWarehouseAsync(warehouse);
-            return CreatedAtAction(nameof(GetWarehouseByIdAsync), new { warehouseId = addedWarehouse.WarehouseId }, addedWarehouse);
+            var addedWarehouse = await _warehouseServices.AddWarehouseAsync(warehouse);
+            return Ok(addedWarehouse);
         }
 
         [HttpPut("{warehouseId}")]
-        public async Task<IActionResult> UpdateWarehouseAsync(int warehouseId, WarehouseDTO warehouse)
+        public async Task<ActionResult<Warehouse>> UpdateWarehouseAsync(int warehouseId, WarehouseDTO warehouse)
         {
             if (warehouseId != warehouse.WarehouseId)
             {
                 return BadRequest();
             }
 
-            var existingWarehouse = await _warehouseRepository.GetWarehouseByIdAsync(warehouseId);
+            var updatedWarehouse =  await _warehouseServices.UpdateWarehouseAsync(warehouseId, warehouse);
 
-            if (existingWarehouse == null)
+            if (updatedWarehouse == null)
             {
                 return NotFound();
             }
 
-            existingWarehouse.WarehouseName = warehouse.WarehouseName;
-            existingWarehouse.WarehouseAddress = warehouse.WarehouseAddress;
-            existingWarehouse.WarehousePhone = warehouse.WarehousePhone;
-            existingWarehouse.WarehouseEmail = warehouse.WarehouseEmail;
-
-            await _warehouseRepository.UpdateWarehouseAsync(existingWarehouse);
-
-            return NoContent();
+            return Ok(updatedWarehouse);
         }
 
         [HttpDelete("{warehouseId}")]
         public async Task<IActionResult> DeleteWarehouseAsync(int warehouseId)
         {
-            var existingWarehouse = await _warehouseRepository.GetWarehouseByIdAsync(warehouseId);
+            var existingWarehouse =  await _warehouseServices.DeleteWarehouseAsync(warehouseId);
 
-            if (existingWarehouse == null)
+            if (!existingWarehouse)
             {
                 return NotFound();
             }
 
-            await _warehouseRepository.DeleteWarehouseAsync(existingWarehouse);
-
-            return NoContent();
+            return Ok();
         }
     }
 }

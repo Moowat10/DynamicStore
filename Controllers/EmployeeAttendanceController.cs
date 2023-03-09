@@ -10,24 +10,24 @@ namespace DynamicStore.Controllers
     [Route("[controller]")]
     public class EmployeeAttendanceController : ControllerBase
     {
-        private readonly IEmployeeAttendanceRepository _repository;
+        private readonly IEmployeeAttendanceServices _employeeAttendanceServices;
 
-        public EmployeeAttendanceController(IEmployeeAttendanceRepository repository)
+        public EmployeeAttendanceController(IEmployeeAttendanceServices EmployeeAttendanceServices)
         {
-            _repository = repository;
+            _employeeAttendanceServices = EmployeeAttendanceServices;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<EmployeeAttendance>>> GetEmployeeAttendancesAsync()
         {
-            var employeeAttendances = await _repository.GetEmployeeAttendancesAsync();
+            var employeeAttendances = await _employeeAttendanceServices.GetEmployeeAttendancesAsync();
             return Ok(employeeAttendances);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<EmployeeAttendance>> GetEmployeeAttendanceByIdAsync(int id)
         {
-            var employeeAttendance = await _repository.GetEmployeeAttendanceByIdAsync(id);
+            var employeeAttendance = await _employeeAttendanceServices.GetEmployeeAttendanceByIdAsync(id);
 
             if (employeeAttendance == null)
             {
@@ -40,76 +40,46 @@ namespace DynamicStore.Controllers
         [HttpGet("employee/{employeeId}")]
         public async Task<ActionResult<IEnumerable<EmployeeAttendance>>> GetEmployeeAttendancesByEmployeeIdAsync(int employeeId)
         {
-            var employeeAttendances = await _repository.GetEmployeeAttendanceByIdAsync(employeeId);
+            var employeeAttendances = await _employeeAttendanceServices.GetEmployeeAttendancesByEmployeeIdAsync(employeeId);
             return Ok(employeeAttendances);
         }
 
         [HttpPost]
         public async Task<ActionResult<EmployeeAttendance>> AddEmployeeAttendanceAsync(EmployeeAttendance employeeAttendance)
         {
-            var addedEmployeeAttendance = await _repository.AddEmployeeAttendanceAsync(employeeAttendance);
-            return CreatedAtAction(nameof(GetEmployeeAttendanceByIdAsync), new { id = addedEmployeeAttendance.EmployeeAttendanceId }, addedEmployeeAttendance);
+            var addedEmployeeAttendance = await _employeeAttendanceServices.AddEmployeeAttendanceAsync(employeeAttendance);
+            return Ok(addedEmployeeAttendance);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateEmployeeAttendanceAsync(int id, EmployeeAttendance employeeAttendance)
+        public async Task<ActionResult<EmployeeAttendance>> UpdateEmployeeAttendanceAsync(int id, EmployeeAttendance employeeAttendance)
         {
             if (id != employeeAttendance.EmployeeAttendanceId)
             {
                 return BadRequest();
             }
 
-            var existingEmployeeAttendance = await _repository.GetEmployeeAttendanceByIdAsync(id);
+            var updatedEmployeeAttendance = await _employeeAttendanceServices.UpdateEmployeeAttendanceAsync(id, employeeAttendance);
 
-            if (existingEmployeeAttendance == null)
+            if (updatedEmployeeAttendance == null)
             {
                 return NotFound();
             }
 
-            // Check for null values before updating
-            if (employeeAttendance.AttendanceDate != null)
-            {
-                existingEmployeeAttendance.AttendanceDate = employeeAttendance.AttendanceDate;
-            }
-
-            if (employeeAttendance.ShiftStartTime != null)
-            {
-                existingEmployeeAttendance.ShiftStartTime = employeeAttendance.ShiftStartTime;
-            }
-
-            if (employeeAttendance.ShiftEndTime != null)
-            {
-                existingEmployeeAttendance.ShiftEndTime = employeeAttendance.ShiftEndTime;
-            }
-
-            existingEmployeeAttendance.IsHoliday = employeeAttendance.IsHoliday;
-
-            existingEmployeeAttendance.HolidayLeft = employeeAttendance.HolidayLeft;
-
-            existingEmployeeAttendance.HolidayPenaltyAmount = employeeAttendance.HolidayPenaltyAmount;
-
-            existingEmployeeAttendance.Bonus = employeeAttendance.Bonus;
-
-            existingEmployeeAttendance.Loan = employeeAttendance.Loan;
-
-            await _repository.UpdateEmployeeAttendanceAsync(existingEmployeeAttendance.EmployeeAttendanceId,existingEmployeeAttendance);
-
-            return NoContent();
+            return Ok(updatedEmployeeAttendance);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteEmployeeAttendanceAsync(int id)
         {
-            var existingEmployeeAttendance = await _repository.GetEmployeeAttendanceByIdAsync(id);
+            var existingEmployeeAttendance =  await _employeeAttendanceServices.DeleteEmployeeAttendanceAsync(id);
 
-            if (existingEmployeeAttendance == null)
+            if (!existingEmployeeAttendance)
             {
                 return NotFound();
             }
 
-            await _repository.DeleteEmployeeAttendanceAsync(id);
-
-            return NoContent();
+            return Ok();
         }
     }
 }

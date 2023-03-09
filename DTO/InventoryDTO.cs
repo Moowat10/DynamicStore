@@ -2,8 +2,6 @@
 
 namespace DynamicStore.DTO
 {
-    namespace DynamicStore.DTOs
-    {
         public class InventoryDTO
         {
             public int InventoryId { get; set; }
@@ -47,5 +45,3 @@ namespace DynamicStore.DTO
             }
         }
     }
-
-}

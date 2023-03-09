@@ -9,77 +9,10 @@ using System.Threading.Tasks;
 
 namespace DynamicStore.Repository
 {
-    public class OrderRepository : IOrderRepository
+    public class OrderRepository : Repository<Order>, IOrderRepository
     {
-        private readonly DataContext _context;
-
-        public OrderRepository(DataContext context)
-        {
-            _context = context;
-        }
-
-        public async Task<IEnumerable<Order>> GetOrdersAsync()
-        {
-            return await _context.Orders
-                .Include(o => o.OrderItems)
-                .ToListAsync();
-        }
-
-        public async Task<Order> GetOrderByIdAsync(int orderId)
-        {
-            return await _context.Orders
-                .Include(o => o.OrderItems)
-                .FirstOrDefaultAsync(o => o.OrderId == orderId);
-        }
-
-        public async Task<Order> AddOrderAsync(Order order)
-        {
-            _context.Orders.Add(order);
-            await _context.SaveChangesAsync();
-            return order;
-        }
-
-        public async Task<Order> UpdateOrderAsync(int orderId, Order order)
-        {
-            var existingOrder = await _context.Orders.FindAsync(orderId);
-
-            if (existingOrder != null)
-            {
-                // Update scalar properties
-                existingOrder.OrderDate = order.OrderDate;
-                existingOrder.OrderTotal = order.OrderTotal;
-                existingOrder.CustomerName = order.CustomerName;
-                existingOrder.CustomerEmail = order.CustomerEmail;
-
-                // Remove existing order items
-                _context.OrderItems.RemoveRange(existingOrder.OrderItems);
-
-                // Add new order items
-                foreach (var item in order.OrderItems)
-                {
-                    existingOrder.OrderItems.Add(item);
-                }
-
-                await _context.SaveChangesAsync();
-            }
-
-            return existingOrder;
-        }
-
-        public async Task<bool> DeleteOrderAsync(int orderId)
-        {
-            var existingOrder = await _context.Orders.FindAsync(orderId);
-
-            if (existingOrder != null)
-            {
-                _context.Orders.Remove(existingOrder);
-                await _context.SaveChangesAsync();
-                return true;
-            }
-
-            return false;
-        }
-
+        public OrderRepository(DataContext context) : base(context) {}
+        
         public async Task<decimal> GetTotalSalesAsync(DateTime startDate, DateTime endDate)
         {
             return await _context.Orders
