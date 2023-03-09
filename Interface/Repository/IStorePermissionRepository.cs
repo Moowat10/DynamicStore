@@ -2,7 +2,7 @@
 
 namespace DynamicStore.Interface
 {
-    public interface IStorePermissionRepository
+    public interface IStorePermissionRepository : IRepository<StorePermission>
     {
         Task<IEnumerable<StorePermission>> GetStorePermissionsByStoreIdAsync(int storeId);
 

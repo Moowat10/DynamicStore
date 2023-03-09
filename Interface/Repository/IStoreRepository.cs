@@ -1,7 +1,9 @@
 ﻿
+using DynamicStore.Models;
+
 namespace DynamicStore.Interface
 {
-    public interface IStoreRepository
+    public interface IStoreRepository : IRepository<Store>
     {
        
     }

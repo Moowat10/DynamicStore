@@ -1,14 +1,13 @@
 using DynamicStore.Interface;
 using DynamicStore.Models;
-using DynamicStore.Repository;
 
 namespace DynamicStore.Services
 {
     public class StorePermissionServices : IStorePermissionServices
     {
-        private readonly StorePermissionRepository _storePermissionRepository;
+        private readonly IStorePermissionRepository _storePermissionRepository;
 
-        public StorePermissionServices(StorePermissionRepository storePermissionRepository)
+        public StorePermissionServices(IStorePermissionRepository storePermissionRepository)
         {
             _storePermissionRepository = storePermissionRepository;
         }

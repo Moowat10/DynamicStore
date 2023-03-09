@@ -9,6 +9,7 @@ namespace DynamicStore.Repository
         public UserRepository(DataContext context) : base(context)
         {
         }
+        
 
     }
 }

@@ -1,17 +1,15 @@
-﻿using DynamicStore.Data;
-using DynamicStore.Interface;
+﻿using DynamicStore.Interface;
 using DynamicStore.Models;
-using DynamicStore.Repository;
 
 namespace DynamicStore.Services
 {
     public class UserStorePermissionsServices : IUserStorePermissionServices
     {
-        private readonly UserStorePermissionRepository _userStorePermissionRepository;
+        private readonly IUserStorePermissionRepository _userStorePermissionRepository;
 
-        public UserStorePermissionsServices(DataContext context)
+        public UserStorePermissionsServices(IUserStorePermissionRepository userStorePermissionRepository)
         {
-            _userStorePermissionRepository = new UserStorePermissionRepository(context);
+            _userStorePermissionRepository = userStorePermissionRepository;
         }
 
         public async Task<IEnumerable<UserStorePermission>> GetAllUserStorePermissionsAsync()

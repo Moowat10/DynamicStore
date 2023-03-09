@@ -1,4 +1,3 @@
-using DynamicStore.Repository;
 using DynamicStore.DTO;
 using DynamicStore.Interface;
 using DynamicStore.Models;
@@ -7,9 +6,9 @@ namespace DynamicStore.Services
 {
     public class EmployeeServices : IEmployeeServices
     {
-        private readonly EmployeeRepository _employeeRepository;
+        private readonly IEmployeeRepository _employeeRepository;
 
-        public EmployeeServices(EmployeeRepository employeeRepository)
+        public EmployeeServices(IEmployeeRepository employeeRepository)
         {
             _employeeRepository = employeeRepository;
         }

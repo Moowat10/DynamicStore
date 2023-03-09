@@ -8,7 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Register services
 builder.Services.AddControllers();
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductServices, ProductServices>();
 builder.Services.AddScoped<IProductCategoryServices, ProductCategoryServices>();
 builder.Services.AddScoped<ICategoryServices, CategoryServices>();
@@ -26,23 +25,25 @@ builder.Services.AddScoped<IInventoryServices, InventoryServices>();
 builder.Services.AddScoped<IOrderServices, OrderServices>();
 builder.Services.AddScoped<IOrderItemService, OrderItemService>();
 builder.Services.AddScoped<IUserServices, UserServices>();
-builder.Services.AddScoped<ProductRepository>();
-builder.Services.AddScoped<ProductCategoryRepository>();
-builder.Services.AddScoped<CategoryRepository>();
-builder.Services.AddScoped<CategoryStoreRepository>();
-builder.Services.AddScoped<ProductStoreRepository>();
-builder.Services.AddScoped<RevenueRepository>();
-builder.Services.AddScoped<StorePermissionRepository>();
-builder.Services.AddScoped<UserStorePermissionRepository>();
-builder.Services.AddScoped<StoreRepository>();
-builder.Services.AddScoped<WarehouseRepository>();
-builder.Services.AddScoped<EmployeeRepository>();
-builder.Services.AddScoped<EmployeeAttendanceRepository>();
-builder.Services.AddScoped<StoreStatisticsRepository>();
-builder.Services.AddScoped<InventoryRepository>();
-builder.Services.AddScoped<OrderRepository>();
-builder.Services.AddScoped<OrderItemRepository>();
-builder.Services.AddScoped<UserRepository>();
+
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICategoryStoreRepository, CategoryStoreRepository>();
+builder.Services.AddScoped<IProductStoreRepository, ProductStoreRepository>();
+builder.Services.AddScoped<IRevenueRepository, RevenueRepository>();
+builder.Services.AddScoped<IStorePermissionRepository, StorePermissionRepository>();
+builder.Services.AddScoped<IUserStorePermissionRepository, UserStorePermissionRepository>();
+builder.Services.AddScoped<IStoreRepository, StoreRepository>();
+builder.Services.AddScoped<IWarehouseRepository, WarehouseRepository>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IEmployeeAttendanceRepository, EmployeeAttendanceRepository>();
+builder.Services.AddScoped<IStoreStatisticsRepository, StoreStatisticsRepository>();
+builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderItemRepository, OrderItemRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));

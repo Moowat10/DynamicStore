@@ -1,15 +1,14 @@
 using DynamicStore.Interface;
 using DynamicStore.Models;
 using DynamicStore.DTO;
-using DynamicStore.Repository;
 
 namespace DynamicStore.Services
 {
     public class WarehouseServices : IWarehouseServices
     {
-        private readonly WarehouseRepository _warehouseRepository;
+        private readonly IWarehouseRepository _warehouseRepository;
 
-        public WarehouseServices(WarehouseRepository warehouseRepository)
+        public WarehouseServices(IWarehouseRepository warehouseRepository)
         {
             _warehouseRepository = warehouseRepository;
         }

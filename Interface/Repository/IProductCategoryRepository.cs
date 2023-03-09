@@ -2,7 +2,7 @@
 
 namespace DynamicStore.Interface
 {
-    public interface IProductCategoryRepository
+    public interface IProductCategoryRepository : IRepository<ProductCategory>
     {
         Task<IEnumerable<Category>> GetProductCategoriesByProductIdAsync(int productId);
         Task<IEnumerable<Product>> GetProductCategoriesByCategoryIdAsync(int categoryId);

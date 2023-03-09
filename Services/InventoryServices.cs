@@ -1,6 +1,5 @@
 using DynamicStore.Interface;
 using DynamicStore.Models;
-using DynamicStore.Repository;
 using DynamicStore.DTO;
 
 
@@ -8,9 +7,9 @@ namespace DynamicStore.Services
 {
     public class InventoryServices : IInventoryServices
     {
-        private readonly InventoryRepository _inventoryRepository;
+        private readonly IInventoryRepository _inventoryRepository;
 
-        public InventoryServices(InventoryRepository inventoryRepository)
+        public InventoryServices(IInventoryRepository inventoryRepository)
         {
             _inventoryRepository = inventoryRepository;
         }

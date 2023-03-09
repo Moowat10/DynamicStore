@@ -1,6 +1,5 @@
 using DynamicStore.Interface;
 using DynamicStore.Models;
-using DynamicStore.Repository;
 
 
 namespace DynamicStore.Services
@@ -8,9 +7,9 @@ namespace DynamicStore.Services
     
     public class CategoryServices : ICategoryServices
     {
-        private readonly CategoryRepository _categoryRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public CategoryServices(CategoryRepository categoryRepository)
+        public CategoryServices(ICategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
         }

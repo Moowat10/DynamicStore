@@ -1,5 +1,4 @@
 using DynamicStore.Models;
-using DynamicStore.Repository;
 using DynamicStore.Interface;
 using DynamicStore.DTO;
 
@@ -7,9 +6,9 @@ namespace DynamicStore.Services
 {
     public class RevenueServices : IRevenueServices
     {
-        private readonly RevenueRepository _revenueRepository;
+        private readonly IRevenueRepository _revenueRepository;
 
-        public RevenueServices(RevenueRepository revenueRepository)
+        public RevenueServices(IRevenueRepository revenueRepository)
         {
             _revenueRepository = revenueRepository;
         }

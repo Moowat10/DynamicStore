@@ -1,15 +1,14 @@
 using DynamicStore.DTO;
 using DynamicStore.Models;
 using DynamicStore.Interface;
-using DynamicStore.Repository;
 
 namespace DynamicStore.Services
 {
     public class OrderServices : IOrderServices
     {
-        private readonly OrderRepository _orderRepository;
+        private readonly IOrderRepository _orderRepository;
 
-        public OrderServices(OrderRepository orderRepository)
+        public OrderServices(IOrderRepository orderRepository)
         {
             _orderRepository = orderRepository;
         }

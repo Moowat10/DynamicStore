@@ -3,7 +3,7 @@
 
 namespace DynamicStore.Interface
 {
-    public interface IInventoryRepository
+    public interface IInventoryRepository : IRepository<Inventory>
     {
         Task<int> GetTotalInventoryAlertQuantityAsync(int warehouseId);
         Task<IEnumerable<Inventory>> GetInventoryByWarehouseIdAsync(int warehouseId);

@@ -1,15 +1,14 @@
 ﻿using DynamicStore.DTO;
 using DynamicStore.Interface;
 using DynamicStore.Models;
-using DynamicStore.Repository;
 
 namespace DynamicStore.Services
 {
     public class UserServices : IUserServices
     {
-        private readonly UserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
 
-        public UserServices(UserRepository userRepository)
+        public UserServices(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }

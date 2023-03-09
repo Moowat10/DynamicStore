@@ -1,15 +1,14 @@
 using DynamicStore.Interface;
 using DynamicStore.Models;
-using DynamicStore.Repository;
 
 
 namespace DynamicStore.Services
 {
     public class ProductStoreServices : IProductStoreServices
     {
-        private readonly ProductStoreRepository _repository;
+        private readonly IProductStoreRepository _repository;
 
-        public ProductStoreServices(ProductStoreRepository repository)
+        public ProductStoreServices(IProductStoreRepository repository)
         {
             _repository = repository;
         }
